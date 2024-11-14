@@ -6,4 +6,5 @@ export const UserSchema = new mongoose.Schema({
     password: String,
     role: String,
     isActive: Boolean,
+    refreshToken: String,
 }, { timestamps: true });

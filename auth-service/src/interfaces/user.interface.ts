@@ -6,5 +6,6 @@ export interface User {
     isActive: boolean;
     createAt?: Date;
     updateAt?: Date;
+    refreshToken?: string;
 }
 
