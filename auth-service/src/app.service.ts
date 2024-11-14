@@ -20,10 +20,12 @@ export class AppService {
     });
 
     if (!user) return new ResponseData<object>(Status.NOT_FOUND, Message.NOT_FOUND, null);
-    const payload = { id: user.id, name: user.username, email: user.email, };
+    const payload = { id: user.id, name: user.username, email: user.email, role: user.role };
 
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
+
+    console.log('payload:', payload);
 
     return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, { access_token: accessToken, refresh_token: refreshToken });
   }
