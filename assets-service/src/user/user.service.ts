@@ -24,6 +24,6 @@ export class UserService {
     }
 
     deleteUser(id: any) {
-        return this.UserModel.findByIdAndUpdate(id, { isActive: false }, { new: true });
+        return this.UserModel.findByIdAndDelete(id, {new: true})
     }
 }

@@ -3,11 +3,13 @@ import { UserService } from './user.service';
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { UserCreateDto } from './dto/createUser.dto';
 import { UserUpdateDto } from './dto/updateUser.dto';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly UserService: UserService) { }
 
+    @MessagePattern({ cmd: "assets_user_getAll" })
     @Get()
     async getUser(): Promise<ResponseData<object>> {
         try {
@@ -17,8 +19,11 @@ export class UserController {
         }
     }
 
+    @MessagePattern({ cmd: "assets_user_getById" })
     @Get(':id')
-    async getUserById(@Param('id') id: string): Promise<ResponseData<object>> {
+    async getUserById(payload: { id: string; }): Promise<ResponseData<object>> {
+        const { id } = payload;
+
         try {
             return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, await this.UserService.getUserById(id));
         } catch (e) {
@@ -26,26 +31,30 @@ export class UserController {
         }
     }
 
+    @MessagePattern({ cmd: "assets_user_create" })
     @Post('create')
-    createUser(@Body() user: UserCreateDto): ResponseData<object> {
+    createUser(payload: UserCreateDto): ResponseData<object> {
         try {
-            return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, this.UserService.createUser(user));
+            return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, this.UserService.createUser(payload));
         } catch (e) {
             return new ResponseData<object>(Status.SERVER_ERROR, Message.SERVER_ERROR, e.message || e);
         }
     }
 
+    @MessagePattern({ cmd: "assets_user_update" })
     @Patch('update')
-    async updateUser(@Body() user: UserUpdateDto): Promise<ResponseData<object>> {
+    async updateUser(payload: UserUpdateDto): Promise<ResponseData<object>> {
         try {
-            return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, await this.UserService.updateUser(user));
+            return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, await this.UserService.updateUser(payload));
         } catch (e) {
             return new ResponseData<object>(Status.SERVER_ERROR, Message.SERVER_ERROR, e.message || e);
         }
     }
 
     @Patch('delete/:id')
-    async deleteUser(@Param('id') id: string): Promise<ResponseData<object>> {
+    async deleteUser(payload: { id: string; }): Promise<ResponseData<object>> {
+        const { id } = payload;
+
         try {
             return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, await this.UserService.deleteUser(id));
         } catch (e) {

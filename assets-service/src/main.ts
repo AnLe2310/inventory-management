@@ -2,19 +2,18 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Transport } from '@nestjs/microservices';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.createMicroservice(AppModule, {
+    transport: Transport.TCP,
+    options: {
+      host: process.env.SERVICE_HOST,
+      port: process.env.SERVICE_PORT,
+    },
+  });
 
-  const config = new DocumentBuilder()
-    .setTitle('User Service')
-    .setDescription('The User Service API description')
-    .setVersion('1.0')
-    .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, documentFactory);
-
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen();
 }
 bootstrap();
