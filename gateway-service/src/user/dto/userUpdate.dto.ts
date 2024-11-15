@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail } from "class-validator";
 
-export class UserUpdateDto {
+export class UserUpdateDTO {
     @ApiProperty()
     id: string;
 

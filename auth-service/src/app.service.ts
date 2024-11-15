@@ -25,8 +25,6 @@ export class AppService {
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
 
-    console.log('payload:', payload);
-
     return new ResponseData<object>(Status.SUCCESS, Message.SUCCESS, { access_token: accessToken, refresh_token: refreshToken });
   }
 

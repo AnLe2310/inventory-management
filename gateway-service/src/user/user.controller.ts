@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { UserUpdateDto } from './dto/updateUser.dto';
-import { UserCreateDto } from './dto/createUser.dto';
+import { UserUpdateDTO } from './dto/userUpdate.dto';
+import { UserCreateDTO } from './dto/userCreate.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles.decorator';
@@ -27,19 +27,19 @@ export class UserController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post('create')
     @Roles('admin', 'manager')
-    async createUser(@Body(ValidationPipe) UserCreateDto: UserCreateDto) {
-        return this.assetsClient.send({ cmd: 'assets_user_create' }, UserCreateDto);
+    async createUser(@Body(ValidationPipe) UserCreateDTO: UserCreateDTO) {
+        return this.assetsClient.send({ cmd: 'assets_user_create' }, UserCreateDTO);
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Patch('update')
     @Roles('admin', 'manager')
-    async updateUser(@Body(ValidationPipe) UserUpdateDto: UserUpdateDto) {
-        return this.assetsClient.send({ cmd: 'assets_user_update' }, UserUpdateDto);
+    async updateUser(@Body(ValidationPipe) UserUpdateDTO: UserUpdateDTO) {
+        return this.assetsClient.send({ cmd: 'assets_user_update' }, UserUpdateDTO);
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Patch('delete:id')
+    @Delete('delete:id')
     @Roles('admin', 'manager')
     async deleteUser(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: 'assets_user_delete' }, { id: id });

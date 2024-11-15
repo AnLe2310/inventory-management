@@ -5,6 +5,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { CategoryController } from './category/category.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
       },
     ])
   ],
-  controllers: [AppController, UserController, AuthController],
+  controllers: [AppController, UserController, AuthController, CategoryController],
   providers: [AppService, JwtStrategy],
 })
 export class AppModule { }
