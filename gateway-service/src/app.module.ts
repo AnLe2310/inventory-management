@@ -7,13 +7,19 @@ import { JwtStrategy } from './auth/jwt.strategy';
 import { DepartmentController } from './department/department.controller';
 import { EquipmentCategoryModule } from './equipment-category/equipment-category.module';
 import { ClientModule } from './client.module';
+import { UserModule } from './user/user.module';
+import { DepartmentModule } from './department/department.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ClientModule,
-    EquipmentCategoryModule
+    EquipmentCategoryModule,
+    UserModule,
+    DepartmentModule,
+    AuthModule
   ],
-  controllers: [AppController, UserController, AuthController, DepartmentController],
+  controllers: [AppController],
   providers: [AppService, JwtStrategy],
 })
 export class AppModule { }
