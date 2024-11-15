@@ -1,4 +1,4 @@
-export class CategoryUpdateDTO {
+export class EquipmentCategoryUpdateDTO {
     id: string;
     name: String;
     description: String;

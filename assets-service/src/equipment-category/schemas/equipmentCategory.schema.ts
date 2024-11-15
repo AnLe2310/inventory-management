@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const CategorySchema = new mongoose.Schema({
+export const EquipmentCategorySchema = new mongoose.Schema({
     name: String,
     description: String,
     isActive: Boolean,

@@ -1,4 +1,4 @@
-export interface Category {
+export interface EquipmentCategory {
     name: String,
     description: String,
     isActive: Boolean,

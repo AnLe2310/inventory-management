@@ -1,4 +1,4 @@
-export class CategoryCreateDTO {
+export class EquipmentCategoryCreateDTO {
     name: String;
     description: String;
     isActive: Boolean;
