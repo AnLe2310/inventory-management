@@ -3,7 +3,7 @@ import { CategoryService } from './category.service';
 import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { CategoryCreateDTO } from './dto/categoryCreate.dto';
-import { CategoryUpdateDTO } from './dto/categoryUpdate';
+import { CategoryUpdateDTO } from './dto/categoryUpdate.dto';
 
 @Controller('category')
 export class CategoryController {

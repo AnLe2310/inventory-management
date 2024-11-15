@@ -6,6 +6,7 @@ import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { CategoryController } from './category/category.controller';
+import { DepartmentController } from './department/department.controller';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { CategoryController } from './category/category.controller';
       },
     ])
   ],
-  controllers: [AppController, UserController, AuthController, CategoryController],
+  controllers: [AppController, UserController, AuthController, CategoryController, DepartmentController],
   providers: [AppService, JwtStrategy],
 })
 export class AppModule { }
