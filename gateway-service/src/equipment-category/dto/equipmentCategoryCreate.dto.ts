@@ -1,18 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class EquipmentCategoryCreateDTO {
-    @ApiProperty()
+    @ApiProperty({ example: "Laptop" })
     name: String;
 
-    @ApiProperty()
+    @ApiProperty({ example: "The description category" })
     description: String;
 
-    @ApiProperty()
+    @ApiProperty({ example: true })
     isActive: Boolean;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     createAt?: Date;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     updateAt?: Date;
 }
