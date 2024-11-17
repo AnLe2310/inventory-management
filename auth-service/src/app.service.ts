@@ -1,25 +1,33 @@
 import { LoginDTO } from './dto/login.dto';
 import { RefreshDTO } from './dto/Refresh.dto';
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class AppService {
   constructor(
     @InjectModel('User') private readonly UserModel: Model<User>,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    @Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,
   ) { }
 
   async login(LoginDTO: LoginDTO) {
     const user = await this.UserModel.findOne({
       $or: [{ username: LoginDTO.username }, { email: LoginDTO.username }], password: LoginDTO.password, isActive: true
-    });
+    }).lean();
 
     if (!user) throw new NotFoundException("User not found or inactive");
-    const payload = { id: user.id, name: user.username, email: user.email, role: user.role };
+
+    const role = await firstValueFrom(
+      this.assetsClient.send({ cmd: "assets_role_getById" }, { id: user.roleId })
+    );
+
+    const payload = { id: user._id, name: user.username, email: user.email, role: role.name };
 
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });

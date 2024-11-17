@@ -15,9 +15,9 @@ export class UserCreateDTO {
     @IsNotEmpty()
     password: string;
 
-    @ApiProperty({ example: 'admin', description: "The user's role" })
+    @ApiProperty({ example: '6739c18f9bb9791f51bd31f6', description: "The user's role" })
     @IsNotEmpty()
-    role: string;
+    roleId: string;
 
     @ApiProperty({ example: true, description: "The user's status" })
     @IsNotEmpty()

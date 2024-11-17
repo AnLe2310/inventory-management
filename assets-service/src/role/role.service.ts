@@ -24,6 +24,6 @@ export class RoleService {
     }
 
     deleteRole(id: any) {
-        return this.RoleModel.findByIdAndDelete(id)
+        return this.RoleModel.findByIdAndDelete(id);
     }
 }

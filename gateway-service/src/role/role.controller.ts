@@ -41,7 +41,7 @@ export class RoleController {
     })
     @Get(":id")
     async getRoleById(@Param('id') id: string) {
-        return this.assetsClient.send({ cmd: "assets_role_getAll" }, { id: id });
+        return this.assetsClient.send({ cmd: "assets_role_getById" }, { id: id });
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
