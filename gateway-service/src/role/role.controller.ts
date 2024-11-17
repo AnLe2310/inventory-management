@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -30,6 +30,7 @@ export class RoleController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
+    @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiResponse({
         schema: {
             example: {
@@ -78,6 +79,7 @@ export class RoleController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
+    @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiResponse({
         schema: {
             example: {

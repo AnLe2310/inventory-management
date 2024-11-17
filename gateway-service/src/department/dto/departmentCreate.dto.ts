@@ -1,18 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class DepartmentCreateDTO {
-    @ApiProperty()
+    @ApiProperty({ example: "Phòng Họp" })
     name: String;
 
-    @ApiProperty()
+    @ApiProperty({ example: "The description department" })
     description: String;
 
-    @ApiProperty()
+    @ApiProperty({ example: true })
     isActive: Boolean;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     createAt?: Date;
 
-    @ApiProperty()
+    @ApiProperty({ required: false })
     updateAt?: Date;
 }

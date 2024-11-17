@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { UserUpdateDTO } from './dto/userUpdate.dto';
 import { UserCreateDTO } from './dto/userCreate.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/role.guard';
 
@@ -26,8 +26,9 @@ export class UserController {
     async getUser() {
         return this.assetsClient.send({ cmd: 'assets_user_getAll' }, {});
     }
-
+    
     @UseGuards(JwtAuthGuard)
+    @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiResponse({
         schema: {
             example: {
@@ -75,6 +76,7 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiResponse({
         schema: {
             example: {

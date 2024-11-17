@@ -5,7 +5,7 @@ import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { EquipmentCategoryCreateDTO } from './dto/equipmentCategoryCreate.dto';
 import { EquipmentCategoryUpdateDTO } from './dto/equipmentCategoryUpdate';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @ApiBearerAuth('access-token')
 @Controller('equipment-category')
@@ -28,6 +28,7 @@ export class EquipmentCategoryController {
     }
 
     @UseGuards(JwtAuthGuard)
+    @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiResponse({
         schema: {
             example: {
@@ -75,6 +76,7 @@ export class EquipmentCategoryController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiResponse({
         schema: {
             example: {
