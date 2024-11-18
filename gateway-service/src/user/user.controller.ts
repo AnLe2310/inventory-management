@@ -3,9 +3,22 @@ import { ClientProxy } from '@nestjs/microservices';
 import { UserUpdateDTO } from './dto/userUpdate.dto';
 import { UserCreateDTO } from './dto/userCreate.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiProperty, ApiResponse } from '@nestjs/swagger';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/role.guard';
+import { CustomResponseDTO } from '../../global/dto/customResponse.dto';
+import { UserResponseDTO } from './dto/userResponse.dto';
+
+
+class UserListResponse extends CustomResponseDTO<UserResponseDTO[]> {
+    @ApiProperty({ type: [UserResponseDTO] })
+    data: UserResponseDTO[];
+}
+
+class UserDetailResponse extends CustomResponseDTO<UserResponseDTO> {
+    @ApiProperty({ type: UserResponseDTO })
+    data: UserResponseDTO;
+}
 
 @Controller('user')
 @ApiBearerAuth('access-token')
@@ -13,62 +26,30 @@ export class UserController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
     @UseGuards(JwtAuthGuard)
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: [{ _id: "67355face20f610c21fb52f8", username: "user", email: "user@gmail.com", password: "123", role: "employee", isActive: true, createdAt: "2024-11-14T02:25:48.131Z", updatedAt: "2024-11-14T09:03:26.980Z" }]
-            }
-        }
-    })
+    @ApiResponse({ type: UserListResponse })
     @Get()
     async getUser() {
         return this.assetsClient.send({ cmd: 'assets_user_getAll' }, {});
     }
-    
+
     @UseGuards(JwtAuthGuard)
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "67355face20f610c21fb52f8", username: "user", email: "user@gmail.com", password: "123", role: "employee", isActive: true, createdAt: "2024-11-14T02:25:48.131Z", updatedAt: "2024-11-14T09:03:26.980Z" }
-            }
-        }
-    })
+    @ApiResponse({ type: UserDetailResponse })
     @Get(':id')
     async getUserById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: 'assets_user_getById' }, { id: id });
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 201,
-                message: 'Server Response Success',
-                data: { username: "user", email: "user@gmail.com", password: "123", role: "manager", isActive: true, createdAt: "2024-11-14T02:25:48.131Z", updatedAt: "2024-11-14T09:03:26.980Z" }
-            }
-        }
-    })
+    @ApiResponse({ type: UserDetailResponse })
     @Post('create')
     @Roles('admin', 'manager')
     async createUser(@Body(ValidationPipe) UserCreateDTO: UserCreateDTO) {
         return this.assetsClient.send({ cmd: 'assets_user_create' }, UserCreateDTO);
     }
-    
+
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "67355face20f610c21fb52f8", username: "user", email: "user@gmail.com", password: "123", role: "manager", isActive: true, createdAt: "2024-11-14T02:25:48.131Z", updatedAt: "2024-11-14T09:03:26.980Z" }
-            }
-        }
-    })
+    @ApiResponse({ type: UserDetailResponse })
     @Patch('update')
     @Roles('admin', 'manager')
     async updateUser(@Body(ValidationPipe) UserUpdateDTO: UserUpdateDTO) {
@@ -77,15 +58,7 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "67355face20f610c21fb52f8", username: "user", email: "user@gmail.com", password: "123", role: "manager", isActive: true, createdAt: "2024-11-14T02:25:48.131Z", updatedAt: "2024-11-14T09:03:26.980Z" }
-            }
-        }
-    })
+    @ApiResponse({ type: UserDetailResponse })
     @Delete('delete/:id')
     @Roles('admin', 'manager')
     async deleteUser(@Param('id') id: string) {
