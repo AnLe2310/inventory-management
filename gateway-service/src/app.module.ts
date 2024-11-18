@@ -9,6 +9,7 @@ import { DepartmentModule } from './department/department.module';
 import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
 import { EquipmentModule } from './equipment/equipment.module';
+import { EquipmentReportModule } from './equipment-report/equipment-report.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { EquipmentModule } from './equipment/equipment.module';
     DepartmentModule,
     AuthModule,
     RoleModule,
-    EquipmentModule
+    EquipmentModule,
+    EquipmentReportModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],
