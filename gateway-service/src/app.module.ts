@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
 import { EquipmentModule } from './equipment/equipment.module';
 import { EquipmentReportModule } from './equipment-report/equipment-report.module';
+import { EquipmentUsageHistoryModule } from './equipment-usage-history/equipment-usage-history.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { EquipmentReportModule } from './equipment-report/equipment-report.modul
     AuthModule,
     RoleModule,
     EquipmentModule,
-    EquipmentReportModule
+    EquipmentReportModule,
+    EquipmentUsageHistoryModule
   ],
   controllers: [AppController],
   providers: [AppService, JwtStrategy],

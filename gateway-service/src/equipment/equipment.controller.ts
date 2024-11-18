@@ -87,7 +87,7 @@ export class EquipmentController {
     })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin', 'manager')
-    @Delete('delete:id')
+    @Delete('delete/:id')
     async deleteEquipment(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment_delete" }, { id: id });
     }

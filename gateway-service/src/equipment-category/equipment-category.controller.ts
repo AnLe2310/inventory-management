@@ -86,7 +86,7 @@ export class EquipmentCategoryController {
             }
         }
     })
-    @Delete('delete:id')
+    @Delete('delete/:id')
     @Roles('admin', 'manager')
     async deleteEquipmentCategory(@Param('id') id: string) {
         return this.assetsClient.send({cmd: "assets_equipment-category_delete"}, {id: id})

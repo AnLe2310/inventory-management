@@ -89,7 +89,7 @@ export class EquipmentReportController {
     })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin', 'manager', 'employee')
-    @Delete('delete')
+    @Delete('delete/:id')
     deleteEquipmentReport(@Param("id") id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-report_delete" }, { id: id });
     }

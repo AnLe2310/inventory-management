@@ -6,6 +6,7 @@ import { EquipmentCategoryModule } from './equipment-category/equipment-category
 import { RoleModule } from './role/role.module';
 import { EquipmentModule } from './equipment/equipment.module';
 import { EquipmentReportModule } from './equipment-report/equipment-report.module';
+import { EquipmentUsageHistoryModule } from './equipment-usage-history/equipment-usage-history.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 @Module({
@@ -17,6 +18,7 @@ dotenv.config();
     RoleModule,
     EquipmentModule,
     EquipmentReportModule,
+    EquipmentUsageHistoryModule,
   ]
 })
 export class AppModule { }

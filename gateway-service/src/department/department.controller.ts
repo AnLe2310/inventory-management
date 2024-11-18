@@ -86,7 +86,7 @@ export class DepartmentController {
         }
     })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete('delete:id')
+    @Delete('delete/:id')
     @Roles('admin', 'manager')
     async deleteDepartment(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_department_delete" }, { id: id });

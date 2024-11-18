@@ -86,7 +86,7 @@ export class UserController {
             }
         }
     })
-    @Delete('delete:id')
+    @Delete('delete/:id')
     @Roles('admin', 'manager')
     async deleteUser(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: 'assets_user_delete' }, { id: id });

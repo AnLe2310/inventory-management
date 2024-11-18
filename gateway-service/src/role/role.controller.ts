@@ -89,7 +89,7 @@ export class RoleController {
             }
         }
     })
-    @Delete('delete:id')
+    @Delete('delete/:id')
     async deleteRole(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_role_delete" }, { id: id });
     }
