@@ -15,7 +15,7 @@ export class UserController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
     @UseGuards(JwtAuthGuard)
-    @ApiCustomResponse({ model: UserResponseDTO, isArray: true })
+    @ApiCustomResponse({ model: UserResponseDTO })
     @Get()
     async getUser() {
         return this.assetsClient.send({ cmd: 'assets_user_getAll' }, {});
@@ -23,14 +23,14 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard)
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiCustomResponse({ model: UserResponseDTO })
+    // @ApiCustomResponse({ model: UserResponseDTO })
     @Get(':id')
     async getUserById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: 'assets_user_getById' }, { id: id });
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @ApiCustomResponse({ model: UserResponseDTO, statusCode: 201 })
+    // @ApiCustomResponse({ model: UserResponseDTO, statusCode: 201 })
     @Post('create')
     @Roles('admin', 'manager')
     async createUser(@Body(ValidationPipe) UserCreateDTO: UserCreateDTO) {
@@ -38,7 +38,7 @@ export class UserController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @ApiCustomResponse({ model: UserResponseDTO })
+    // @ApiCustomResponse({ model: UserResponseDTO })
     @Patch('update')
     @Roles('admin', 'manager')
     async updateUser(@Body(ValidationPipe) UserUpdateDTO: UserUpdateDTO) {
@@ -47,7 +47,7 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiCustomResponse({ model: UserResponseDTO })
+    // @ApiCustomResponse({ model: UserResponseDTO })
     @Delete('delete/:id')
     @Roles('admin', 'manager')
     async deleteUser(@Param('id') id: string) {

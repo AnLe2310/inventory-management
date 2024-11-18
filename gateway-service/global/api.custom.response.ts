@@ -2,32 +2,34 @@ import { applyDecorators, Type } from '@nestjs/common';
 import { ApiResponse, ApiProperty } from '@nestjs/swagger';
 
 interface ApiCustomResponseOptions<TModel> {
-    model: Type<TModel>; isArray?: boolean; description?: string; statusCode?: number;
+  model: Type<TModel>; 
+  isArray?: boolean;
+  statusCode?: number;
+  message?: string;
 }
 
-// Hàm helper
 export function ApiCustomResponse<TModel>({
-    model,
-    isArray = false,
-    description = 'Successful response',
-    statusCode = 200,
+  model,
+  isArray = false,
+  statusCode = 200,
+  message = 'Server Response Success',
 }: ApiCustomResponseOptions<TModel>) {
-    class CustomResponseClass {
-        @ApiProperty({ example: statusCode })
-        statusCode: number;
+  class CustomResponseClass {
+    @ApiProperty({ example: statusCode })
+    statusCode: number;
 
-        @ApiProperty({ example: 'Server Response Success' })
-        message: string;
+    @ApiProperty({ example: message })
+    message: string;
 
-        @ApiProperty({ type: isArray ? [model] : model })
-        data: TModel | TModel[];
-    }
+    @ApiProperty({ type: isArray ? [model] : model })
+    data: TModel | TModel[];
+  }
 
-    return applyDecorators(
-        ApiResponse({
-            status: statusCode,
-            description,
-            type: CustomResponseClass,
-        }),
-    );
+  return applyDecorators(
+    ApiResponse({
+      status: statusCode,
+      description: message,
+      type: CustomResponseClass,
+    }),
+  );
 }
