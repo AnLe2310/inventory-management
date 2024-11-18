@@ -6,6 +6,8 @@ import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RoleCreateDTO } from './dto/roleCreate.dto';
 import { RoleUpdateDTO } from './dto/roleUpdate.dto';
+import { ApiCustomResponse } from 'global/api.custom.response';
+import { RoleResponseDTO } from './dto/roleResponse.dto';
 
 @Controller('role')
 @ApiBearerAuth('access-token')
@@ -14,15 +16,7 @@ export class RoleController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: [{ _id: "6738cf2c78d8f182314b516c", name: "admin", description: "The description role", createdAt: "2024-11-16T16:58:20.518Z", updatedAt: "2024-11-16T16:58:20.518Z", }]
-            }
-        }
-    })
+    @ApiCustomResponse({ model: RoleResponseDTO, isArray: true })
     @Get()
     async getRole() {
         return this.assetsClient.send({ cmd: "assets_role_getAll" }, {});
@@ -31,15 +25,7 @@ export class RoleController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "6738cf2c78d8f182314b516c", name: "admin", description: "The description role", createdAt: "2024-11-16T16:58:20.518Z", updatedAt: "2024-11-16T16:58:20.518Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: RoleResponseDTO })
     @Get(":id")
     async getRoleById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_role_getById" }, { id: id });
@@ -47,15 +33,7 @@ export class RoleController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 201,
-                message: 'Server Response Success',
-                data: { _id: "6738cf2c78d8f182314b516c", name: "admin", description: "The description role", createdAt: "2024-11-16T16:58:20.518Z", updatedAt: "2024-11-16T16:58:20.518Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: RoleResponseDTO, statusCode: 201 })
     @Post('create')
     async createRole(@Body(ValidationPipe) RoleCreateDTO: RoleCreateDTO) {
         return this.assetsClient.send({ cmd: "assets_role_create" }, RoleCreateDTO);
@@ -63,15 +41,7 @@ export class RoleController {
 
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "6738cf2c78d8f182314b516c", name: "admin", description: "The description role", createdAt: "2024-11-16T16:58:20.518Z", updatedAt: "2024-11-16T16:58:20.518Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: RoleResponseDTO })
     @Patch('update')
     async updateRole(@Body(ValidationPipe) RoleUpdateDTO: RoleUpdateDTO) {
         return this.assetsClient.send({ cmd: "assets_role_update" }, RoleUpdateDTO);
@@ -80,15 +50,7 @@ export class RoleController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "6738cf2c78d8f182314b516c", name: "admin", description: "The description role", createdAt: "2024-11-16T16:58:20.518Z", updatedAt: "2024-11-16T16:58:20.518Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: RoleResponseDTO })
     @Delete('delete/:id')
     async deleteRole(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_role_delete" }, { id: id });
