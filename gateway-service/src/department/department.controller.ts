@@ -5,22 +5,16 @@ import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { DepartmentUpdateDTO } from './dto/departmentUpdate.dto';
 import { DepartmentCreateDTO } from './dto/departmentCreate.dto';
-import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiCustomResponse } from 'global/api.custom.response';
+import { DepartmentResponseDTO } from './dto/departmentResponse.dto';
 
 @Controller('department')
 @ApiBearerAuth('access-token')
 export class DepartmentController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: [{ _id: "6736cb3bb9a808891d124fa0", name: "Phòng Họp", description: "Mô tả phòng họp", isActive: true, createdAt: "2024-11-15T04:16:59.587Z", updatedAt: "2024-11-15T04:18:35.835Z", }]
-            }
-        }
-    })
+    @ApiCustomResponse({ model: DepartmentResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard)
     @Get()
     async getDepartment() {
@@ -28,30 +22,14 @@ export class DepartmentController {
     }
 
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "6736cb3bb9a808891d124fa0", name: "Phòng Họp", description: "Mô tả phòng họp", isActive: true, createdAt: "2024-11-15T04:16:59.587Z", updatedAt: "2024-11-15T04:18:35.835Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: DepartmentResponseDTO })
     @UseGuards(JwtAuthGuard)
     @Get(":id")
     async getDepartmentById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_department_getById" }, { id: id });
     }
 
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 201,
-                message: 'Server Response Success',
-                data: { _id: "6736cb3bb9a808891d124fa0", name: "Phòng Họp", description: "Mô tả phòng họp", isActive: true, createdAt: "2024-11-15T04:16:59.587Z", updatedAt: "2024-11-15T04:18:35.835Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: DepartmentResponseDTO, statusCode: 201 })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post('create')
     @Roles('admin', 'manager')
@@ -59,15 +37,7 @@ export class DepartmentController {
         return this.assetsClient.send({ cmd: "assets_department_create" }, DepartmentCreateDTO);
     }
 
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "6736cb3bb9a808891d124fa0", name: "Phòng Họp", description: "Mô tả phòng họp", isActive: true, createdAt: "2024-11-15T04:16:59.587Z", updatedAt: "2024-11-15T04:18:35.835Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: DepartmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Patch('update')
     @Roles('admin', 'manager')
@@ -76,15 +46,7 @@ export class DepartmentController {
     }
 
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @ApiResponse({
-        schema: {
-            example: {
-                statusCode: 200,
-                message: 'Server Response Success',
-                data: { _id: "6736cb3bb9a808891d124fa0", name: "Phòng Họp", description: "Mô tả phòng họp", isActive: true, createdAt: "2024-11-15T04:16:59.587Z", updatedAt: "2024-11-15T04:18:35.835Z", }
-            }
-        }
-    })
+    @ApiCustomResponse({ model: DepartmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete('delete/:id')
     @Roles('admin', 'manager')

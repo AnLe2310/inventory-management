@@ -1,9 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 
 export class EquipmentUsageHistoryResponseDTO {
-    @ApiProperty({example: "673aba178fba41ff1c889693"})
+    @ApiProperty({ example: "673aba178fba41ff1c889693" })
     id: string;
-    
+
     @ApiProperty({ example: "6739f055d58a34a294ba6840" })
     equipmentId: string;
 
@@ -25,9 +25,9 @@ export class EquipmentUsageHistoryResponseDTO {
     @ApiProperty({ example: true })
     isActive: boolean;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({ example: new Date().toISOString() })
     createAt: Date;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({ example: new Date().toISOString() })
     updateAt: Date;
 }
