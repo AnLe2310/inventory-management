@@ -8,7 +8,7 @@ export class EmailService {
 
     async sendEmail(EmailSendDTO: EmailSendDTO) {
         if (!EmailSendDTO.text && !EmailSendDTO.html)
-            throw new Error('Email content must have either text or html.');
+            return new Error('Email content must have either text or html.');
 
         const result = await this.MailerService.sendMail(EmailSendDTO);
 

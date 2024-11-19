@@ -41,10 +41,10 @@ export class AppService {
 
     const user = await this.UserModel.findOne({ $or: [{ username }, { email: username }], isActive: true, }).lean();
 
-    if (!user) throw new NotFoundException("User not found or inactive");
+    if (!user) return new NotFoundException("User not found or inactive");
 
     const isPasswordValid = await this.comparePasswords(password, user.password);
-    if (!isPasswordValid) throw new UnauthorizedException("Invalid credentials");
+    if (!isPasswordValid) return new UnauthorizedException("Invalid credentials");
 
     const role = await firstValueFrom(
       this.assetsClient.send({ cmd: "assets_role_getById" }, { id: user.roleId })
@@ -64,7 +64,7 @@ export class AppService {
     const user = await this.UserModel.findById(payload.id);
 
     if (!user || user.refreshToken !== refreshToken) {
-      throw new UnauthorizedException("Refresh token is invalid or expired");
+      return new UnauthorizedException("Refresh token is invalid or expired");
     }
 
     const newAccessToken = this.jwtService.sign({ id: user.id, name: user.username, email: user.email });
@@ -74,7 +74,7 @@ export class AppService {
   async register(payload: any) {
     const user = await firstValueFrom(this.assetsClient.send({ cmd: "assets_user_create" }, payload));
 
-    if (!user) throw new Error('Register Failed');
+    if (!user) return new Error('Register Failed');
 
     const htmlContent = await this.getHtmlTemplate('template/register.email.template.html', {
       actionLink: `http://localhost:3000/auth/active/${user._id}`
