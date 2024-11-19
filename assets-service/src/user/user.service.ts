@@ -32,8 +32,6 @@ export class UserService {
     }
 
     async createUser(user: any) {
-        console.log(user);
-
         user.password = await this.hashPassword(user.password);
         return new this.UserModel(user).save();
     }
