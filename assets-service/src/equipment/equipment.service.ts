@@ -8,6 +8,8 @@ export class EquipmentService {
     constructor(@InjectModel('Equipment') private readonly EquipmentModel: Model<Equipment>) { }
 
     getEquipment(keyword: string) {
+        if (!keyword) return this.EquipmentModel.find();
+
         return this.EquipmentModel.find({
             $or: [
                 { name: { $regex: keyword, $options: 'i' } },

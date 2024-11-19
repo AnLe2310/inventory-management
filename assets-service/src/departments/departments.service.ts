@@ -8,6 +8,8 @@ export class DepartmentsService {
     constructor(@InjectModel('Department') private readonly DepartmentModel: Model<Department>) {}
 
     getDepartment(keyword: string) {
+        if (!keyword) return this.DepartmentModel.find();
+        
         return this.DepartmentModel.find({
             $or: [
                 { name: { $regex: keyword, $options: 'i' } },

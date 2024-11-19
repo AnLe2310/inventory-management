@@ -8,6 +8,8 @@ export class RoleService {
     constructor(@InjectModel('Role') private readonly RoleModel: Model<Role>) { }
 
     getRole(keyword: string) {
+        if (!keyword) return this.RoleModel.find();
+
         return this.RoleModel.find({
             $or: [
                 { name: { $regex: keyword, $options: 'i' } },
