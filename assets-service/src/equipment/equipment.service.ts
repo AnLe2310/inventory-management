@@ -7,11 +7,12 @@ import { Equipment } from './interfaces/equipment.interface';
 export class EquipmentService {
     constructor(@InjectModel('Equipment') private readonly EquipmentModel: Model<Equipment>) { }
 
-    getEquipment(keyword: string) {
+    getEquipment(keyword?: string) {
         if (!keyword) return this.EquipmentModel.find();
 
         return this.EquipmentModel.find({
             $or: [
+                { id: { $regex: keyword, $options: 'i' } },
                 { name: { $regex: keyword, $options: 'i' } },
                 { description: { $regex: keyword, $options: 'i' } },
                 { categoryId: { $regex: keyword, $options: 'i' } },

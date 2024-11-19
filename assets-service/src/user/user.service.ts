@@ -7,7 +7,7 @@ import { User } from './interfaces/user.interface';
 export class UserService {
     constructor(@InjectModel('User') private readonly UserModel: Model<User>) { }
 
-    getUser(keyword: string) {
+    getUser(keyword?: string) {
         if (!keyword) return this.UserModel.find();
 
         return this.UserModel.find({

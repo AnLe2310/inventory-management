@@ -2,12 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { EquipmentCategory } from './interfaces/equipmentCategory.interface';
+import { EquipmentService } from 'src/equipment/equipment.service';
 
 @Injectable()
 export class EquipmentCategoryService {
-    constructor(@InjectModel("EquipmentCategory") private readonly EquipmentCategoryModel: Model<EquipmentCategory>) { }
+    constructor(
+        @InjectModel("EquipmentCategory") private readonly EquipmentCategoryModel: Model<EquipmentCategory>,
+        private readonly EquipmentService: EquipmentService
+    ) { }
 
-    getEquipmentCategory(keyword: string) {
+    getEquipmentCategory(keyword?: string) {
         if (!keyword) return this.EquipmentCategoryModel.find();
 
         return this.EquipmentCategoryModel.find({
@@ -30,7 +34,12 @@ export class EquipmentCategoryService {
         return this.EquipmentCategoryModel.findByIdAndUpdate(equipmentCategory.id, equipmentCategory, { new: true });
     }
 
-    deleteEquipmentCategory(id: any) {
-        return this.EquipmentCategoryModel.findByIdAndDelete(id);
+    async deleteEquipmentCategory(id: any) {
+        const equipments = await this.EquipmentService.getEquipment(id);
+
+        for (const equipment of equipments)
+            await this.EquipmentService.deleteEquipment(equipment.id);
+
+        return await this.EquipmentCategoryModel.findByIdAndDelete(id);
     }
 }

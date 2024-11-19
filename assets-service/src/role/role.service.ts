@@ -7,7 +7,7 @@ import { Role } from './interfaces/role.interface';
 export class RoleService {
     constructor(@InjectModel('Role') private readonly RoleModel: Model<Role>) { }
 
-    getRole(keyword: string) {
+    getRole(keyword?: string) {
         if (!keyword) return this.RoleModel.find();
 
         return this.RoleModel.find({

@@ -5,32 +5,32 @@ import { Department } from './interfaces/department.interface';
 
 @Injectable()
 export class DepartmentsService {
-    constructor(@InjectModel('Department') private readonly DepartmentModel: Model<Department>) {}
+    constructor(@InjectModel('Department') private readonly DepartmentModel: Model<Department>) { }
 
-    getDepartment(keyword: string) {
+    getDepartment(keyword?: string) {
         if (!keyword) return this.DepartmentModel.find();
-        
+
         return this.DepartmentModel.find({
             $or: [
                 { name: { $regex: keyword, $options: 'i' } },
                 { description: { $regex: keyword, $options: 'i' } },
             ]
-        })
+        });
     }
 
     getDepartmentById(id: any) {
-        return this.DepartmentModel.findById(id)
+        return this.DepartmentModel.findById(id);
     }
 
     createDepartment(department: any) {
-        return new this.DepartmentModel(department).save()
+        return new this.DepartmentModel(department).save();
     }
 
     updateDepartment(department: any) {
-        return this.DepartmentModel.findByIdAndUpdate(department.id, department, {new: true})
+        return this.DepartmentModel.findByIdAndUpdate(department.id, department, { new: true });
     }
 
     deleteDepartment(id: any) {
-        return this.DepartmentModel.findByIdAndDelete(id)
+        return this.DepartmentModel.findByIdAndDelete(id);
     }
 }

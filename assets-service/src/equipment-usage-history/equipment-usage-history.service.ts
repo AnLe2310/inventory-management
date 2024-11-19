@@ -7,7 +7,7 @@ import { EquipmentUsageHistory } from './interfaces/equipmentUsageHistory.interf
 export class EquipmentUsageHistoryService {
     constructor(@InjectModel('EquipmentUsageHistory') private readonly EquipmentUsageHistoryModel: Model<EquipmentUsageHistory>) { }
 
-    async getEquipmentUsageHistory(keyword: string) {
+    async getEquipmentUsageHistory(keyword?: string) {
         if (!keyword) return this.EquipmentUsageHistoryModel.find();
 
         return await this.EquipmentUsageHistoryModel.find({

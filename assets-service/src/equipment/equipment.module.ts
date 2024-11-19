@@ -9,6 +9,7 @@ import { EquipmentSchema } from './schemas/equipment.schema';
     MongooseModule.forFeature([{ name: 'Equipment', schema: EquipmentSchema }])
   ],
   controllers: [EquipmentController],
-  providers: [EquipmentService]
+  providers: [EquipmentService],
+  exports: [EquipmentService]
 })
 export class EquipmentModule {}
