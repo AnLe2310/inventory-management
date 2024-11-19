@@ -6,6 +6,7 @@ import { User } from './interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AppService {
@@ -15,19 +16,29 @@ export class AppService {
     @Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,
   ) { }
 
+  async hashPassword(password: string) {
+    return await bcrypt.hash(password, 10);
+  }
+
+  async comparePasswords(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
+  }
+
   async login(LoginDTO: LoginDTO) {
-    const user = await this.UserModel.findOne({
-      $or: [{ username: LoginDTO.username }, { email: LoginDTO.username }], password: LoginDTO.password, isActive: true
-    }).lean();
+    const { username, password } = LoginDTO;
+
+    const user = await this.UserModel.findOne({ $or: [{ username }, { email: username }], isActive: true, }).lean();
 
     if (!user) throw new NotFoundException("User not found or inactive");
+
+    const isPasswordValid = await this.comparePasswords(password, user.password);
+    if (!isPasswordValid) throw new UnauthorizedException("Invalid credentials");
 
     const role = await firstValueFrom(
       this.assetsClient.send({ cmd: "assets_role_getById" }, { id: user.roleId })
     );
 
     const payload = { id: user._id, name: user.username, email: user.email, role: role.name };
-
     const accessToken = this.jwtService.sign(payload);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '30d' });
 

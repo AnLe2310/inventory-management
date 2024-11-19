@@ -2,10 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
     constructor(@InjectModel('User') private readonly UserModel: Model<User>) { }
+
+    async hashPassword(password: string) {
+        return await bcrypt.hash(password, 10);
+    }
+
+    async comparePasswords(password: string, hashedPassword: string) {
+        return await bcrypt.compare(password, hashedPassword);
+    }
 
     getUser(keyword?: string) {
         if (!keyword) return this.UserModel.find();
@@ -22,7 +31,10 @@ export class UserService {
         return this.UserModel.findById(id);
     }
 
-    createUser(user: any) {
+    async createUser(user: any) {
+        console.log(user);
+
+        user.password = await this.hashPassword(user.password);
         return new this.UserModel(user).save();
     }
 
