@@ -17,7 +17,7 @@ export class EquipmentUsageHistoryController {
     @ApiQuery({ name: 'keyword', required: false })
     @ApiCustomResponse({ model: EquipmentUsageHistoryResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Get()
     getEquipmentUsageHistory(@Query('keyword') keyword: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-usage-history_getAll" }, { keyword });
@@ -26,7 +26,7 @@ export class EquipmentUsageHistoryController {
     @ApiParam({ name: 'id', example: "673aba178fba41ff1c889693" })
     @ApiCustomResponse({ model: EquipmentUsageHistoryResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Get(':id')
     getEquipmentUsageHistoryById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-usage-history_getById" }, { id });
@@ -34,7 +34,7 @@ export class EquipmentUsageHistoryController {
 
     @ApiCustomResponse({ model: EquipmentUsageHistoryResponseDTO, statusCode: 201 })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Post('create')
     createEquipmentUsageHistory(@Body(ValidationPipe) EquipmentUsageHistoryCreateDTO: EquipmentUsageHistoryCreateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment-usage-history_create" }, EquipmentUsageHistoryCreateDTO);
@@ -42,7 +42,7 @@ export class EquipmentUsageHistoryController {
 
     @ApiCustomResponse({ model: EquipmentUsageHistoryResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Patch('update')
     updateEquipmentUsageHistory(@Body(ValidationPipe) EquipmentUsageHistoryUpdateDTO: EquipmentUsageHistoryUpdateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment-usage-history_update" }, EquipmentUsageHistoryUpdateDTO);
@@ -51,7 +51,7 @@ export class EquipmentUsageHistoryController {
     @ApiCustomResponse({ model: EquipmentUsageHistoryResponseDTO })
     @ApiParam({ name: 'id', example: "673aba178fba41ff1c889693" })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Delete('delete/:id')
     deleteEquipmentUsageHistory(@Param("id") id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-usage-history_delete" }, { id });

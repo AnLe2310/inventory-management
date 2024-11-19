@@ -17,7 +17,7 @@ export class EquipmentReportController {
     @ApiQuery({ name: "keywords", required: false })
     @ApiCustomResponse({ model: EquipmentReportResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager', 'employee')
+    @Roles('Admin', 'Manager', 'Employee')
     @Get()
     getEquipmentReport(@Query('keywords') keyword: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-report_getAll" }, { keyword });
@@ -26,7 +26,7 @@ export class EquipmentReportController {
     @ApiParam({ name: 'id', example: '673aa12e3c7b8fa1eb138f09' })
     @ApiCustomResponse({ model: EquipmentReportResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager', 'employee')
+    @Roles('Admin', 'Manager', 'Employee')
     @Get(":id")
     getEquipmentReportId(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-report_getById" }, { id: id });
@@ -34,7 +34,7 @@ export class EquipmentReportController {
 
     @ApiCustomResponse({ model: EquipmentReportResponseDTO, statusCode: 201 })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager', 'employee')
+    @Roles('Admin', 'Manager', 'Employee')
     @Post('create')
     createEquipmentReport(@Body(ValidationPipe) EquipmentReportCreateDTO: EquipmentReportCreateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment-report_create" }, EquipmentReportCreateDTO);
@@ -42,7 +42,7 @@ export class EquipmentReportController {
 
     @ApiCustomResponse({ model: EquipmentReportResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager', 'employee')
+    @Roles('Admin', 'Manager', 'Employee')
     @Patch('update')
     updateEquipmentReport(@Body(ValidationPipe) EquipmentReportUpdateDTO: EquipmentReportUpdateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment-report_update" }, EquipmentReportUpdateDTO);
@@ -51,7 +51,7 @@ export class EquipmentReportController {
     @ApiParam({ name: 'id', type: String, example: '673aa12e3c7b8fa1eb138f09' })
     @ApiCustomResponse({ model: EquipmentReportResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager', 'employee')
+    @Roles('Admin', 'Manager', 'Employee')
     @Delete('delete/:id')
     deleteEquipmentReport(@Param("id") id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-report_delete" }, { id: id });

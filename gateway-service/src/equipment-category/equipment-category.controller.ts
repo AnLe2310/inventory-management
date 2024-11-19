@@ -15,14 +15,16 @@ export class EquipmentCategoryController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
     @ApiQuery({ name: "keyword", required: false })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO, isArray: true })
     @Get()
     async getEquipmentCategory(@Query('keyword') keyword: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-category_getAll" }, { keyword });
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO })
     @Get(":id")
@@ -33,7 +35,7 @@ export class EquipmentCategoryController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO, statusCode: 201 })
     @Post('create')
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     async createEquipmentCategory(@Body(ValidationPipe) EquipmentCategoryCreateDTO: EquipmentCategoryCreateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment-category_create" }, EquipmentCategoryCreateDTO);
     }
@@ -41,7 +43,7 @@ export class EquipmentCategoryController {
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO })
     @Patch('update')
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     async updateEquipmentCategory(@Body(ValidationPipe) EquipmentCategoryUpdateDTO: EquipmentCategoryUpdateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment-category_update" }, EquipmentCategoryUpdateDTO);
     }
@@ -50,7 +52,7 @@ export class EquipmentCategoryController {
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO })
     @Delete('delete/:id')
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     async deleteEquipmentCategory(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment-category_delete" }, { id });
     }

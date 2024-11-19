@@ -16,7 +16,8 @@ export class DepartmentController {
 
     @ApiQuery({ name: 'keyword', required: false })
     @ApiCustomResponse({ model: DepartmentResponseDTO, isArray: true })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
     @Get()
     async getDepartment(@Query('keyword') keyword: string) {
         return this.assetsClient.send({ cmd: "assets_department_getAll" }, { keyword });
@@ -24,7 +25,8 @@ export class DepartmentController {
 
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiCustomResponse({ model: DepartmentResponseDTO })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
     @Get(":id")
     async getDepartmentById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_department_getById" }, { id: id });
@@ -33,7 +35,7 @@ export class DepartmentController {
     @ApiCustomResponse({ model: DepartmentResponseDTO, statusCode: 201 })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post('create')
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     async createDepartment(@Body(ValidationPipe) DepartmentCreateDTO: DepartmentCreateDTO) {
         return this.assetsClient.send({ cmd: "assets_department_create" }, DepartmentCreateDTO);
     }
@@ -41,7 +43,7 @@ export class DepartmentController {
     @ApiCustomResponse({ model: DepartmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Patch('update')
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     async updateDepartment(@Body(ValidationPipe) DepartmentUpdateDTO: DepartmentUpdateDTO) {
         return this.assetsClient.send({ cmd: "assets_department_update" }, DepartmentUpdateDTO);
     }
@@ -50,7 +52,7 @@ export class DepartmentController {
     @ApiCustomResponse({ model: DepartmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete('delete/:id')
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     async deleteDepartment(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_department_delete" }, { id: id });
     }

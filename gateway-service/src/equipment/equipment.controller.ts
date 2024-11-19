@@ -16,7 +16,8 @@ export class EquipmentController {
 
     @ApiQuery({ name: 'keyword', required: false })
     @ApiCustomResponse({ model: EquipmentResponseDTO, isArray: true })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
     @Get()
     async getEquipment(@Query('keyword') keyword: string) {
         return this.assetsClient.send({ cmd: "assets_equipment_getAll" }, { keyword });
@@ -24,7 +25,8 @@ export class EquipmentController {
 
     @ApiParam({ name: 'id', required: true, example: '6739f055d58a34a294ba6840' })
     @ApiCustomResponse({ model: EquipmentResponseDTO })
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
     @Get('id')
     async getEquipmentById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment_getById" }, { id });
@@ -32,7 +34,7 @@ export class EquipmentController {
 
     @ApiCustomResponse({ model: EquipmentResponseDTO, statusCode: 201 })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Post('create')
     async createEquipment(@Body(ValidationPipe) EquipmentCreateDTO: EquipmentCreateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment_create" }, EquipmentCreateDTO);
@@ -40,7 +42,7 @@ export class EquipmentController {
 
     @ApiCustomResponse({ model: EquipmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Patch('update')
     async updateEquipment(@Body(ValidationPipe) EquipmentUpdateDTO: EquipmentUpdateDTO) {
         return this.assetsClient.send({ cmd: "assets_equipment_update" }, EquipmentUpdateDTO);
@@ -49,7 +51,7 @@ export class EquipmentController {
     @ApiQuery({ example: { id: "6739f055d58a34a294ba6840" } })
     @ApiCustomResponse({ model: EquipmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin', 'manager')
+    @Roles('Admin', 'Manager')
     @Delete('delete/:id')
     async deleteEquipment(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment_delete" }, { id });

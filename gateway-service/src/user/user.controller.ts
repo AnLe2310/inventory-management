@@ -16,7 +16,8 @@ export class UserController {
 
     @ApiQuery({ name: "keyword", required: false })
     @ApiCustomResponse({ model: UserResponseDTO, isArray: true })
-    @UseGuards(JwtAuthGuard)
+    @Roles('Admin', 'Manager')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get()
     getUser(@Query('keyword') keyword: string) {
         return this.assetsClient.send({ cmd: 'assets_user_getAll' }, { keyword });
@@ -24,33 +25,34 @@ export class UserController {
 
     @ApiCustomResponse({ model: UserResponseDTO })
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
-    @UseGuards(JwtAuthGuard)
+    @Roles('Admin', 'Manager')
+    @UseGuards(JwtAuthGuard, RolesGuard)
     @Get(':id')
     getUserById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: 'assets_user_getById' }, { id });
     }
 
     @ApiCustomResponse({ model: UserResponseDTO, statusCode: 201 })
+    @Roles('Admin', 'Manager')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post('create')
-    @Roles('admin', 'manager')
     createUser(@Body(ValidationPipe) UserCreateDTO: UserCreateDTO) {
         return this.assetsClient.send({ cmd: 'assets_user_create' }, UserCreateDTO);
     }
 
     @ApiCustomResponse({ model: UserResponseDTO })
+    @Roles('Admin', 'Manager')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Patch('update')
-    @Roles('admin', 'manager')
     updateUser(@Body(ValidationPipe) UserUpdateDTO: UserUpdateDTO) {
         return this.assetsClient.send({ cmd: 'assets_user_update' }, UserUpdateDTO);
     }
 
     @ApiCustomResponse({ model: UserResponseDTO })
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
+    @Roles('Admin', 'Manager')
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Delete('delete/:id')
-    @Roles('admin', 'manager')
     deleteUser(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: 'assets_user_delete' }, { id });
     }

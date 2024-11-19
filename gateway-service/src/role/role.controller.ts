@@ -14,9 +14,9 @@ import { RoleResponseDTO } from './dto/roleResponse.dto';
 export class RoleController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
-    @ApiQuery({name: 'keyword', required: false})
+    @ApiQuery({ name: 'keyword', required: false })
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('Admin', 'Manager')
     @ApiCustomResponse({ model: RoleResponseDTO, isArray: true })
     @Get()
     async getRole(@Query('keyword') keyword: string) {
@@ -24,7 +24,7 @@ export class RoleController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('Admin', 'Manager')
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiCustomResponse({ model: RoleResponseDTO })
     @Get(":id")
@@ -33,7 +33,7 @@ export class RoleController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('Admin')
     @ApiCustomResponse({ model: RoleResponseDTO, statusCode: 201 })
     @Post('create')
     async createRole(@Body(ValidationPipe) RoleCreateDTO: RoleCreateDTO) {
@@ -41,7 +41,7 @@ export class RoleController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('Admin')
     @ApiCustomResponse({ model: RoleResponseDTO })
     @Patch('update')
     async updateRole(@Body(ValidationPipe) RoleUpdateDTO: RoleUpdateDTO) {
@@ -49,7 +49,7 @@ export class RoleController {
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Roles('admin')
+    @Roles('Admin')
     @ApiParam({ name: 'id', example: '6736cb3bb9a808891d124fa0' })
     @ApiCustomResponse({ model: RoleResponseDTO })
     @Delete('delete/:id')
