@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum } from "class-validator";
 
 export class EquipmentReportCreateDTO {
     @ApiProperty({ example: "6739f055d58a34a294ba6840", description: "The equipment's id" })
@@ -17,6 +18,7 @@ export class EquipmentReportCreateDTO {
     description: string;
 
     @ApiProperty({ enum: ["Pending", "In progress", "Resolved", "Rejected"], example: "Pending", description: "The report's status" })
+    @IsEnum(["Pending", "In progress", "Resolved", "Rejected"])
     status: string;
 
     @ApiProperty({ example: true, description: "The report's status" })

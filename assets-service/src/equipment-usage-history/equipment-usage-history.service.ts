@@ -15,7 +15,7 @@ export class EquipmentUsageHistoryService {
                 { equipmentId: { $regex: keyword, $options: 'i' } },
                 { userId: { $regex: keyword, $options: 'i' } },
                 { "condition.before": { $regex: keyword, $options: 'i' } },
-                { "condition.alter": { $regex: keyword, $options: 'i' } }
+                { "condition.after": { $regex: keyword, $options: 'i' } }
             ]
         });
     }

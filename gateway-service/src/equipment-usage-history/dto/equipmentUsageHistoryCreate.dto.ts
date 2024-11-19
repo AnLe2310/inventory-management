@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum } from "class-validator";
 
 export class EquipmentUsageHistoryCreateDTO {
     @ApiProperty({ example: "6739f055d58a34a294ba6840" })
@@ -16,7 +17,7 @@ export class EquipmentUsageHistoryCreateDTO {
     @ApiProperty({ example: { before: "New", after: "New" } })
     condition: {
         before: string;
-        alter: string;
+        after: string;
     };
 
     @ApiProperty({ example: true })

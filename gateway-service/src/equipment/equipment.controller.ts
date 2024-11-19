@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/role.guard';
 import { EquipmentCreateDTO } from './dto/equipmentCreate.dto';
@@ -14,7 +14,7 @@ import { EquipmentResponseDTO } from './dto/equipmentResponse.dto';
 export class EquipmentController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
-    @ApiQuery({name: 'keyword', required: false})
+    @ApiQuery({ name: 'keyword', required: false })
     @ApiCustomResponse({ model: EquipmentResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard)
     @Get()
@@ -22,12 +22,12 @@ export class EquipmentController {
         return this.assetsClient.send({ cmd: "assets_equipment_getAll" }, { keyword });
     }
 
-    @ApiQuery({ example: { id: "6739f055d58a34a294ba6840" } })
+    @ApiParam({ name: 'id', required: true, example: '6739f055d58a34a294ba6840' })
     @ApiCustomResponse({ model: EquipmentResponseDTO })
     @UseGuards(JwtAuthGuard)
     @Get('id')
     async getEquipmentById(@Param('id') id: string) {
-        return this.assetsClient.send({ cmd: "assets_equipment_getById" }, { id: id });
+        return this.assetsClient.send({ cmd: "assets_equipment_getById" }, { id });
     }
 
     @ApiCustomResponse({ model: EquipmentResponseDTO, statusCode: 201 })
@@ -52,6 +52,6 @@ export class EquipmentController {
     @Roles('admin', 'manager')
     @Delete('delete/:id')
     async deleteEquipment(@Param('id') id: string) {
-        return this.assetsClient.send({ cmd: "assets_equipment_delete" }, { id: id });
+        return this.assetsClient.send({ cmd: "assets_equipment_delete" }, { id });
     }
 }

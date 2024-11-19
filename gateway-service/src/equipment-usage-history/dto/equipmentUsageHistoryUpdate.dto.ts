@@ -19,7 +19,7 @@ export class EquipmentUsageHistoryUpdateDTO {
     @ApiProperty({ example: { before: "New", after: "New" } })
     condition: {
         before: string;
-        alter: string;
+        after: string;
     };
 
     @ApiProperty({ example: true })

@@ -7,7 +7,7 @@ export interface EquipmentUsageHistory {
     };
     condition: {
         before: string;
-        alter: string;
+        after: string;
     };
     isActive: boolean;
     createAt: Date;

@@ -9,7 +9,7 @@ export const EquipmentUsageHistorySchema = new mongoose.Schema({
     },
     condition: {
         before: String,
-        alter: String,
+        after: String,
     },
     isActive: Boolean,
 }, { timestamps: true });

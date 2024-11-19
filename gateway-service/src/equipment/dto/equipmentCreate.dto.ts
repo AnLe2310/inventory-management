@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { IsEnum } from "class-validator";
 
 export class EquipmentCreateDTO {
     @ApiProperty({ example: "Laptop" })
@@ -17,9 +18,11 @@ export class EquipmentCreateDTO {
     specifications?: object;
 
     @ApiProperty({ enum: ['Available', 'In use', 'Maintenance'], example: 'Available' })
+    @IsEnum(['Available', 'In use', 'Maintenance'])
     status: string;
 
     @ApiProperty({ enum: ['New', 'Good', 'Fair', 'Poor'], example: 'New' })
+    @IsEnum(['New', 'Good', 'Fair', 'Poor'])
     condition: string;
 
     @ApiProperty({ example: true })

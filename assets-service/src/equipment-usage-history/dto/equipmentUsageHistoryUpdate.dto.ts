@@ -8,7 +8,7 @@ export class EquipmentUsageHistoryUpdateDto {
     };
     condition: {
         before: string;
-        alter: string;
+        after: string;
     };
     isActive: boolean;
 }
