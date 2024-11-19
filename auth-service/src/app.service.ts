@@ -1,12 +1,14 @@
-import { LoginDTO } from './dto/login.dto';
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices';
+import { EmailSendDTO } from './dto/emailSend.dto';
 import { firstValueFrom } from 'rxjs';
 import * as bcrypt from 'bcrypt';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class AppService {
@@ -24,8 +26,18 @@ export class AppService {
     return await bcrypt.compare(password, hashedPassword);
   }
 
-  async login(LoginDTO: LoginDTO) {
-    const { username, password } = LoginDTO;
+  async getHtmlTemplate(filePath: string, replacements: Record<string, string>) {
+    const templatePath = path.join(__dirname, filePath);
+    let template = fs.readFileSync(templatePath, 'utf-8');
+
+    for (const [key, value] of Object.entries(replacements))
+      template = template.replace(`{{${key}}}`, value);
+
+    return template;
+  }
+
+  async login(loginDTO: any) {
+    const { username, password } = loginDTO;
 
     const user = await this.UserModel.findOne({ $or: [{ username }, { email: username }], isActive: true, }).lean();
 
@@ -57,6 +69,29 @@ export class AppService {
 
     const newAccessToken = this.jwtService.sign({ id: user.id, name: user.username, email: user.email });
     return { access_token: newAccessToken };
+  }
+
+  async register(payload: any) {
+    const user = await firstValueFrom(this.assetsClient.send({ cmd: "assets_user_create" }, payload));
+
+    if (!user) throw new Error('Register Failed');
+
+    const htmlContent = await this.getHtmlTemplate('template/register.email.template.html', {
+      actionLink: `http://localhost:3000/auth/active/${user._id}`
+    });
+
+    const mailOptions: EmailSendDTO = {
+      to: user.email,
+      subject: 'Activate your account',
+      html: htmlContent
+    };
+
+    await firstValueFrom(this.assetsClient.send({ cmd: "assets_email_send" }, mailOptions));
+    return null;
+  }
+
+  async active(id: string) {
+    return await this.UserModel.findOneAndUpdate({ _id: id }, { isActive: true }, { new: true });
   }
 }
 

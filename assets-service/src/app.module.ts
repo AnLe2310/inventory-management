@@ -10,6 +10,7 @@ import { EquipmentUsageHistoryModule } from './equipment-usage-history/equipment
 import { EmailModule } from './email/email.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
+
 @Module({
   imports: [
     UserModule,
