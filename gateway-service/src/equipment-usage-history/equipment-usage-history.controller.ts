@@ -1,7 +1,7 @@
 import { EquipmentUsageHistoryResponseDTO } from './dto/equipmentUsageHistoryResponse.dto';
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -14,12 +14,13 @@ import { ApiCustomResponse } from 'global/api.custom.response';
 export class EquipmentUsageHistoryController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
+    @ApiQuery({ name: 'keyword', required: false })
     @ApiCustomResponse({ model: EquipmentUsageHistoryResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin', 'manager')
     @Get()
-    getEquipmentUsageHistory() {
-        return this.assetsClient.send({ cmd: "assets_equipment-usage-history_getAll" }, {});
+    getEquipmentUsageHistory(@Query('keyword') keyword: string) {
+        return this.assetsClient.send({ cmd: "assets_equipment-usage-history_getAll" }, { keyword });
     }
 
     @ApiParam({ name: 'id', example: "673aba178fba41ff1c889693" })

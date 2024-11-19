@@ -10,8 +10,8 @@ export class EquipmentCategoryController {
 
     @MessagePattern({ cmd: "assets_equipment-category_getAll" })
     @Get()
-    async getEquipmentCategory() {
-        return await this.EquipmentCategoryService.getEquipmentCategory();
+    async getEquipmentCategory(payload: { keyword: string; }) {
+        return await this.EquipmentCategoryService.getEquipmentCategory(payload.keyword);
     }
 
     @MessagePattern({ cmd: "assets_equipment-category_getById" })

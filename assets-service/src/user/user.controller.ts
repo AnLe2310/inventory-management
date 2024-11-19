@@ -10,15 +10,14 @@ export class UserController {
 
     @MessagePattern({ cmd: "assets_user_getAll" })
     @Get()
-    async getUser() {
-        return await this.UserService.getUser();
+    async getUser(payload: { keyword: string; }) {
+        return await this.UserService.getUser(payload.keyword);
     }
 
     @MessagePattern({ cmd: "assets_user_getById" })
     @Get()
     async getUserById(payload: { id: string; }) {
-        const { id } = payload;
-        return await this.UserService.getUserById(id);
+        return await this.UserService.getUserById(payload.id);
     }
 
     @MessagePattern({ cmd: "assets_user_create" })
@@ -36,8 +35,6 @@ export class UserController {
     @MessagePattern({ cmd: "assets_user_delete" })
     @Delete()
     async deleteUser(payload: { id: string; }) {
-        const { id } = payload;
-
-        return await this.UserService.deleteUser(id);
+        return await this.UserService.deleteUser(payload.id);
     }
 }

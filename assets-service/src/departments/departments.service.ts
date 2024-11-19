@@ -7,8 +7,13 @@ import { Department } from './interfaces/department.interface';
 export class DepartmentsService {
     constructor(@InjectModel('Department') private readonly DepartmentModel: Model<Department>) {}
 
-    getDepartment() {
-        return this.DepartmentModel.find()
+    getDepartment(keyword: string) {
+        return this.DepartmentModel.find({
+            $or: [
+                { name: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } },
+            ]
+        })
     }
 
     getDepartmentById(id: any) {

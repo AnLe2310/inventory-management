@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -14,11 +14,12 @@ import { EquipmentResponseDTO } from './dto/equipmentResponse.dto';
 export class EquipmentController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
+    @ApiQuery({name: 'keyword', required: false})
     @ApiCustomResponse({ model: EquipmentResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard)
     @Get()
-    async getEquipment() {
-        return this.assetsClient.send({ cmd: "assets_equipment_getAll" }, {});
+    async getEquipment(@Query('keyword') keyword: string) {
+        return this.assetsClient.send({ cmd: "assets_equipment_getAll" }, { keyword });
     }
 
     @ApiQuery({ example: { id: "6739f055d58a34a294ba6840" } })

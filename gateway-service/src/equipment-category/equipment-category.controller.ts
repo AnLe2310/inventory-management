@@ -1,11 +1,11 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { EquipmentCategoryCreateDTO } from './dto/equipmentCategoryCreate.dto';
 import { EquipmentCategoryUpdateDTO } from './dto/equipmentCategoryUpdate';
-import { ApiBearerAuth, ApiParam } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { ApiCustomResponse } from 'global/api.custom.response';
 import { EquipmentCategoryResponseDTO } from './dto/equipmentCategoryResponse.dto';
 
@@ -14,11 +14,12 @@ import { EquipmentCategoryResponseDTO } from './dto/equipmentCategoryResponse.dt
 export class EquipmentCategoryController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
+    @ApiQuery({ name: "keyword", required: false })
     @UseGuards(JwtAuthGuard)
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO, isArray: true })
     @Get()
-    async getEquipmentCategory() {
-        return this.assetsClient.send({ cmd: "assets_equipment-category_getAll" }, {});
+    async getEquipmentCategory(@Query('keyword') keyword: string) {
+        return this.assetsClient.send({ cmd: "assets_equipment-category_getAll" }, { keyword });
     }
 
     @UseGuards(JwtAuthGuard)
@@ -26,7 +27,7 @@ export class EquipmentCategoryController {
     @ApiCustomResponse({ model: EquipmentCategoryResponseDTO })
     @Get(":id")
     async getEquipmentCategoryById(@Param('id') id: string) {
-        return this.assetsClient.send({ cmd: "assets_equipment-category_getById" }, { id: id });
+        return this.assetsClient.send({ cmd: "assets_equipment-category_getById" }, { id });
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)
@@ -51,6 +52,6 @@ export class EquipmentCategoryController {
     @Delete('delete/:id')
     @Roles('admin', 'manager')
     async deleteEquipmentCategory(@Param('id') id: string) {
-        return this.assetsClient.send({ cmd: "assets_equipment-category_delete" }, { id: id });
+        return this.assetsClient.send({ cmd: "assets_equipment-category_delete" }, { id });
     }
 }

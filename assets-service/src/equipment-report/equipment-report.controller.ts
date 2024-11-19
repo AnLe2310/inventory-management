@@ -10,8 +10,8 @@ export class EquipmentReportController {
 
     @MessagePattern({ cmd: "assets_equipment-report_getAll" })
     @Get()
-    async getEquipmentReport() {
-        return await this.EquipmentReportService.getEquipmentReport();
+    async getEquipmentReport(payload: { keyword: string; }) {
+        return await this.EquipmentReportService.getEquipmentReport(payload.keyword);
     }
 
     @MessagePattern({ cmd: "assets_equipment-report_getById" })

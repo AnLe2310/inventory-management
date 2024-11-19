@@ -10,8 +10,8 @@ export class EquipmentUsageHistoryController {
 
     @MessagePattern({ cmd: "assets_equipment-usage-history_getAll" })
     @Get()
-    async getEquipmentUsageHistory() {
-        return await this.EquipmentUsageHistoryService.getEquipmentUsageHistory();
+    async getEquipmentUsageHistory(payload: { keyword: string; }) {
+        return await this.EquipmentUsageHistoryService.getEquipmentUsageHistory(payload.keyword);
     }
 
     @MessagePattern({ cmd: "assets_equipment-usage-history_getById" })

@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/role.guard';
 import { Roles } from 'src/auth/roles.decorator';
@@ -14,12 +14,13 @@ import { RoleResponseDTO } from './dto/roleResponse.dto';
 export class RoleController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
+    @ApiQuery({name: 'keyword', required: false})
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('admin')
     @ApiCustomResponse({ model: RoleResponseDTO, isArray: true })
     @Get()
-    async getRole() {
-        return this.assetsClient.send({ cmd: "assets_role_getAll" }, {});
+    async getRole(@Query('keyword') keyword: string) {
+        return this.assetsClient.send({ cmd: "assets_role_getAll" }, { keyword });
     }
 
     @UseGuards(JwtAuthGuard, RolesGuard)

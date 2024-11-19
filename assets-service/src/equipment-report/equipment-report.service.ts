@@ -7,8 +7,17 @@ import { Model } from 'mongoose';
 export class EquipmentReportService {
     constructor(@InjectModel('EquipmentReport') private readonly EquipmentReportModel: Model<EquipmentReport>) { }
 
-    getEquipmentReport() {
-        return this.EquipmentReportModel.find();
+    getEquipmentReport(keyword: string) {
+        return this.EquipmentReportModel.find({
+            $or: [
+                { equipmentId: { $regex: keyword, $options: 'i' } },
+                { userId: { $regex: keyword, $options: 'i' } },
+                { departmentId: { $regex: keyword, $options: 'i' } },
+                { title: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } },
+                { status: { $regex: keyword, $options: 'i' } }
+            ]
+        });
     }
 
     getEquipmentReportById(id: string) {
@@ -23,7 +32,7 @@ export class EquipmentReportService {
         return this.EquipmentReportModel.findByIdAndUpdate(equipmentReport.id, equipmentReport, { new: true });
     }
 
-    deleteEquipmentReport(id:string) {
+    deleteEquipmentReport(id: string) {
         return this.EquipmentReportModel.findByIdAndDelete(id);
     }
 }

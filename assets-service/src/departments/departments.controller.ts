@@ -10,8 +10,8 @@ export class DepartmentsController {
 
     @MessagePattern({ cmd: "assets_department_getAll" })
     @Get()
-    async getDepartment() {
-        return await this.DepartmentsService.getDepartment();
+    async getDepartment(payload: { keyword: string }) {
+        return await this.DepartmentsService.getDepartment(payload.keyword);
     }
 
     @MessagePattern({ cmd: "assets_department_getById" })

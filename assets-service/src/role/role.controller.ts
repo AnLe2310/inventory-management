@@ -10,8 +10,8 @@ export class RoleController {
 
     @MessagePattern({ cmd: "assets_role_getAll" })
     @Get()
-    async getRole() {
-        return await this.RoleService.getRole();
+    async getRole(payload: { keyword: string; }) {
+        return await this.RoleService.getRole(payload.keyword);
     }
 
     @MessagePattern({ cmd: "assets_role_getById" })

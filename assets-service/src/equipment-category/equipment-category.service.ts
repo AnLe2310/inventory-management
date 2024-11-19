@@ -7,8 +7,13 @@ import { EquipmentCategory } from './interfaces/equipmentCategory.interface';
 export class EquipmentCategoryService {
     constructor(@InjectModel("EquipmentCategory") private readonly EquipmentCategoryModel: Model<EquipmentCategory>) { }
 
-    getEquipmentCategory() {
-        return this.EquipmentCategoryModel.find()
+    getEquipmentCategory(keyword: string) {
+        return this.EquipmentCategoryModel.find({
+            $or: [
+                { name: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } }
+            ]
+        })
     }
 
     getEquipmentCategoryById(id: any) {

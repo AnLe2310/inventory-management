@@ -7,8 +7,13 @@ import { Role } from './interfaces/role.interface';
 export class RoleService {
     constructor(@InjectModel('Role') private readonly RoleModel: Model<Role>) { }
 
-    getRole() {
-        return this.RoleModel.find();
+    getRole(keyword: string) {
+        return this.RoleModel.find({
+            $or: [
+                { name: { $regex: keyword, $options: 'i' } },
+                { description: { $regex: keyword, $options: 'i' } }
+            ]
+        });
     }
 
     getRoleById(id: any) {

@@ -7,8 +7,13 @@ import { User } from './interfaces/user.interface';
 export class UserService {
     constructor(@InjectModel('User') private readonly UserModel: Model<User>) { }
 
-    getUser() {
-        return this.UserModel.find();
+    getUser(keyword: string) {
+        return this.UserModel.find({
+            $or: [
+                { username: { $regex: keyword, $options: 'i' } },
+                { email: { $regex: keyword, $options: 'i' } }
+            ]
+        });
     }
 
     getUserById(id: any) {
@@ -24,6 +29,6 @@ export class UserService {
     }
 
     deleteUser(id: any) {
-        return this.UserModel.findByIdAndDelete(id, {new: true})
+        return this.UserModel.findByIdAndDelete(id, { new: true });
     }
 }

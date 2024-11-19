@@ -7,8 +7,15 @@ import { EquipmentUsageHistory } from './interfaces/equipmentUsageHistory.interf
 export class EquipmentUsageHistoryService {
     constructor(@InjectModel('EquipmentUsageHistory') private readonly EquipmentUsageHistoryModel: Model<EquipmentUsageHistory>) { }
 
-    async getEquipmentUsageHistory() {
-        return await this.EquipmentUsageHistoryModel.find();
+    async getEquipmentUsageHistory(keyword: string) {
+        return await this.EquipmentUsageHistoryModel.find({
+            $or: [
+                { equipmentId: { $regex: keyword, $options: 'i' } },
+                { userId: { $regex: keyword, $options: 'i' } },
+                { "condition.before": { $regex: keyword, $options: 'i' } },
+                { "condition.alter": { $regex: keyword, $options: 'i' } }
+            ]
+        });
     }
 
     async getEquipmentUsageHistoryById(id: string) {
