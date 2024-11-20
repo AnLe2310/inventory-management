@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
 import { JwtService } from '@nestjs/jwt';
-import { ClientProxy } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { EmailSendDTO } from './dto/emailSend.dto';
 import { firstValueFrom } from 'rxjs';
 import * as bcrypt from 'bcrypt';
@@ -41,10 +41,10 @@ export class AppService {
 
     const user = await this.UserModel.findOne({ $or: [{ username }, { email: username }], isActive: true, }).lean();
 
-    if (!user) return new NotFoundException("User not found or inactive");
+    if (!user) throw new RpcException({ message: "User not found or inactive", statusCode: 404 });
 
     const isPasswordValid = await this.comparePasswords(password, user.password);
-    if (!isPasswordValid) return new UnauthorizedException("Invalid credentials");
+    if (!isPasswordValid) throw new RpcException({ message: "Invalid credentials", statusCode: 401 });
 
     const role = await firstValueFrom(
       this.assetsClient.send({ cmd: "assets_role_getById" }, { id: user.roleId })
@@ -64,7 +64,7 @@ export class AppService {
     const user = await this.UserModel.findById(payload.id);
 
     if (!user || user.refreshToken !== refreshToken) {
-      return new UnauthorizedException("Refresh token is invalid or expired");
+      throw new RpcException({ message: "Refresh token is invalid or expired", statusCode: 401 });
     }
 
     const newAccessToken = this.jwtService.sign({ id: user.id, name: user.username, email: user.email });
@@ -74,7 +74,7 @@ export class AppService {
   async register(payload: any) {
     const user = await firstValueFrom(this.assetsClient.send({ cmd: "assets_user_create" }, payload));
 
-    if (!user) return new Error('Register Failed');
+    if (!user) throw new RpcException({ message: 'Register Failed', statusCode: 500 });
 
     const htmlContent = await this.getHtmlTemplate('template/register.email.template.html', {
       actionLink: `http://localhost:3000/auth/active/${user._id}`

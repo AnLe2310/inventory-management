@@ -1,6 +1,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { EmailSendDTO } from "./dto/emailSend.dto";
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class EmailService {
@@ -8,7 +9,7 @@ export class EmailService {
 
     async sendEmail(EmailSendDTO: EmailSendDTO) {
         if (!EmailSendDTO.text && !EmailSendDTO.html)
-            return new Error('Email content must have either text or html.');
+            throw new RpcException('Email content must have either text or html.');
 
         const result = await this.MailerService.sendMail(EmailSendDTO);
 
