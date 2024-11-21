@@ -12,7 +12,8 @@
         <a class="btn btn-ghost text-xl">Inventory Management</a>
     </div>
     <div class="flex-none">
-        <button class="btn btn-ghost" onclick="modal_login.showModal()">Login</button>
+        <button id="btn-login" class="btn btn-ghost" onclick="modal_login.showModal()">Login</button>
+        <button id="btn-logout" class="btn btn-ghost">Logout</button>
     </div>
 </div>
 
@@ -27,12 +28,12 @@
             <div id="tab-sign-in">
                 <label class="input input-bordered flex items-center gap-2 mb-4">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" placeholder="Username or Email" class="grow" />
+                    <input id="input-login-username" type="text" placeholder="Username or Email" class="grow" />
                 </label>
 
                 <label class="input input-bordered flex items-center gap-2 mb-4">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" placeholder="Password" class="grow" />
+                    <input id="input-login-password" type="text" placeholder="Password" class="grow" />
                 </label>
 
                 <div class="flex justify-center">
@@ -43,26 +44,26 @@
             <div id="tab-sign-up" class="hidden">
                 <label class="input input-bordered flex items-center gap-2 mb-4">
                     <i class="fa-solid fa-envelope"></i>
-                    <input type="text" placeholder="Email" class="grow" />
+                    <input id="input-register-email" type="text" placeholder="Email" class="grow" />
                 </label>
 
                 <label class="input input-bordered flex items-center gap-2 mb-4">
                     <i class="fa-solid fa-user"></i>
-                    <input type="text" placeholder="Username" class="grow" />
+                    <input id="input-register-username" type="text" placeholder="Username" class="grow" />
                 </label>
 
                 <label class="input input-bordered flex items-center gap-2 mb-4">
                     <i class="fa-solid fa-key"></i>
-                    <input type="text" placeholder="Password" class="grow" />
+                    <input id="input-register-password" type="text" placeholder="Password" class="grow" />
                 </label>
 
                 <label class="input input-bordered flex items-center gap-2 mb-4">
                     <i class="fa-solid fa-key"></i>
-                    <input type="text" placeholder="Confirm Password" class="grow" />
+                    <input id="input-register-confirm-password" type="text" placeholder="Confirm Password" class="grow" />
                 </label>
 
                 <div class="flex justify-center">
-                    <button class="btn btn-primary w-32 text-white">Sign Up</button>
+                    <button id="btn-sign-up" class="btn btn-primary w-32 text-white">Sign Up</button>
                 </div>
             </div>
         </div>

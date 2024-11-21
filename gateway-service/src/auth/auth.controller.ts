@@ -18,7 +18,7 @@ export class AuthController {
         return this.authClient.send({ cmd: "auth_login" }, LoginDTO);
     }
 
-    @ApiCustomResponse({ model: UserResponseDTO })
+    @ApiCustomResponse({})
     @Post('register')
     register(@Body(ValidationPipe) RegisterDTO: RegisterDTO) {
         return this.authClient.send({ cmd: "auth_register" }, RegisterDTO);

@@ -9,7 +9,12 @@ interface ApiCustomResponseOptions<TModel> {
   message?: string;
 }
 
-function createResponseType<TModel>(model: Type<TModel>, isArray: boolean, statusCode: number, message: string) {
+function createResponseType<TModel>(
+  model?: Type<TModel>,
+  isArray: boolean = false,
+  statusCode: number = 200,
+  message: string = 'Server Response Success',
+) {
   class CR {
     @ApiProperty({ example: statusCode })
     statusCode: number;
@@ -17,8 +22,8 @@ function createResponseType<TModel>(model: Type<TModel>, isArray: boolean, statu
     @ApiProperty({ example: message })
     message: string;
 
-    @ApiProperty({ type: isArray ? [model] : model })
-    data: TModel | TModel[];
+    @ApiProperty({ type: model ? (isArray ? [model] : model) : Object, required: !!model })
+    data: TModel | TModel[] | null;
   }
 
   Object.defineProperty(CR, 'name', { value: `CR${crypto.randomBytes(4).toString('hex')}` });
@@ -31,7 +36,7 @@ export function ApiCustomResponse<TModel>({
   isArray = false,
   statusCode = 200,
   message = 'Server Response Success',
-}: ApiCustomResponseOptions<TModel>) {
+}: Partial<ApiCustomResponseOptions<TModel>>) {
   const ResponseType = createResponseType(model, isArray, statusCode, message);
 
   return applyDecorators(
