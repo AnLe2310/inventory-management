@@ -77,30 +77,35 @@
         <div class="flex gap-4 mb-4">
             <select id="select-equipment-category" class="select select-sm select-bordered w-full max-w-xs"></select>
             <script type="text/x-handlebars-template" id="select-equipment-category-template">
-                <option disabled selected>Category?</option>
-                {{#each equipmentCategories}}
-                <option value="{{this._id}}">{{this.name}}</option>
-                {{/each}}
+                <option disabled selected>Select category</option>
+                %#each equipmentCategories%
+                <option value="%this._id%">%this.name%</option>
+                %/each%
             </script>
 
-            <select id="select-equipment-department" class="select select-sm select-bordered w-full max-w-xs"></select>
-            <script type="text/x-handlebars-template" id="select-equipment-department-template">
-                 <option disabled selected>Department?</option>
-                <option>Han Solo</option>
+            <select id="select-department" class="select select-sm select-bordered w-full max-w-xs"></select>
+            <script type="text/x-handlebars-template" id="select-department-template">
+                <option disabled selected>Select department</option>
+                %#each departments%
+                <option value="%this._id%">%this.name%</option>
+                %/each%
             </script>
         </div>
 
         <div class="flex gap-4 mb-4">
             <select id="select-equipment-status" class="select select-sm select-bordered w-full max-w-xs">
-                <option disabled selected>Status?</option>
-                <option>Han Solo</option>
-                <option>ABC</option>
+                <option disabled selected>Select Status</option>
+                <option value="Available">Available</option>
+                <option value="In use">In use</option>
+                <option value="Maintenance">Maintenance</option>
             </select>
 
             <select id="select-equipment-condition" class="select select-sm select-bordered w-full max-w-xs">
                 <option disabled selected>Condition?</option>
-                <option>Han Solo</option>
-                <option>ABC</option>
+                <option value="New">New</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
             </select>
         </div>
 

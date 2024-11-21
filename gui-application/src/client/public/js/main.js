@@ -123,3 +123,77 @@ $('#input-search').on('input', _.debounce(function () {
     showEquipment(keyword);
 }, 200));
 
+function loadEquipmentCategory() {
+    $.ajax({
+        method: "GET",
+        url: `${api}/equipment-category`,
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        dataType: "json",
+        contentType: "application/json",
+        success: function (res) {
+            const template = convertPlaceHbs($('#select-equipment-category-template').html());
+            const compiled = Handlebars.compile(template);
+            const html = compiled({ equipmentCategories: res.data });
+            $('#select-equipment-category').html(html);
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+} loadEquipmentCategory();
+
+function loadDepartment() {
+    $.ajax({
+        method: "GET",
+        url: `${api}/department`,
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        dataType: "json",
+        contentType: "application/json",
+        success: function (res) {
+            const template = convertPlaceHbs($('#select-department-template').html());
+            const compiled = Handlebars.compile(template);
+            const html = compiled({ departments: res.data });
+            $('#select-department').html(html);
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+} loadDepartment();
+
+$('#btn-equipment-create').click(function () {
+    const data = {
+        name: $('#input-equipment-name').val().trim(),
+        description: $('#input-equipment-description').val().trim(),
+        categoryId: $('#select-equipment-category').val(),
+        departmentId: $('#select-department').val(),
+        status: $('#select-equipment-status').val(),
+        condition: $('#select-equipment-condition').val(),
+        isActive: true
+    };
+
+    $.ajax({
+        method: "POST",
+        url: `${api}/equipment/create`,
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "json",
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        success: function () {
+            $('#input-equipment-name').val('');
+            $('#input-equipment-description').val('');
+            $('#select-equipment-category').val('');
+            $('#select-department').val('');
+            $('#select-equipment-status').val('');
+            $('#select-equipment-condition').val('');
+            showToast('create equipment successfully', 'success');
+            modal_equipment_create.close();
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+});
