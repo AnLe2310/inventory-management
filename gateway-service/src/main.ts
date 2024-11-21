@@ -9,6 +9,11 @@ dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: ['http://localhost:3003'],
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Inventory Management System')
     .setDescription('')
@@ -28,3 +33,4 @@ async function bootstrap() {
   await app.listen(process.env.GATEWAY_PORT ?? 3000, process.env.GATEWAY_HOST);
 }
 bootstrap();
+
