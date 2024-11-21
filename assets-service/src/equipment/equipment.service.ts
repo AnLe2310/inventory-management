@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Equipment } from './interfaces/equipment.interface';
 
 @Injectable()
@@ -8,19 +8,53 @@ export class EquipmentService {
     constructor(@InjectModel('Equipment') private readonly EquipmentModel: Model<Equipment>) { }
 
     getEquipment(keyword?: string) {
-        if (!keyword) return this.EquipmentModel.find();
+        let query = {};
 
-        return this.EquipmentModel.find({
-            $or: [
-                { id: { $regex: keyword, $options: 'i' } },
-                { name: { $regex: keyword, $options: 'i' } },
-                { description: { $regex: keyword, $options: 'i' } },
-                { categoryId: { $regex: keyword, $options: 'i' } },
-                { departmentId: { $regex: keyword, $options: 'i' } },
-                { status: { $regex: keyword, $options: 'i' } },
-                { condition: { $regex: keyword, $options: 'i' } }
-            ]
-        });
+        if (keyword)
+            query = {
+                $or: [
+                    { name: { $regex: keyword, $options: 'i' } },
+                    { description: { $regex: keyword, $options: 'i' } },
+                    { "category.name": { $regex: keyword, $options: 'i' } },
+                    { "department.name": { $regex: keyword, $options: 'i' } },
+                    { status: { $regex: keyword, $options: 'i' } },
+                    { condition: { $regex: keyword, $options: 'i' } }
+                ]
+            };
+
+        return this.EquipmentModel.aggregate([
+            {
+                $match: query
+            },
+            {
+                $lookup: {
+                    from: 'equipmentcategories',
+                    let: { categoryId: { $toObjectId: '$categoryId' } },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ['$_id', '$$categoryId'] } } },
+                        { $project: { _id: 1, name: 1, description: 1 } }
+                    ],
+                    as: 'category'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'departments',
+                    let: { departmentId: { $toObjectId: '$departmentId' } },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ['$_id', '$$departmentId'] } } },
+                        { $project: { _id: 1, name: 1, description: 1 } }
+                    ],
+                    as: 'department'
+                }
+            },
+            {
+                $project: {
+                    categoryId: 0,
+                    departmentId: 0,
+                }
+            }
+        ]);
     }
 
     getEquipmentById(id: any) {

@@ -1,0 +1,119 @@
+<div class="container mx-auto md:p-6 lg:p-8 xl:p-10 bg-base-100 mt-10 rounded-btn">
+    <div class="mb-4 flex justify-between">
+        <button class="btn btn-sm btn-primary" onclick="modal_equipment_create.showModal()">
+            <i class="fa-solid fa-plus"></i> Add Equipment
+        </button>
+
+        <label class="input input-sm input-bordered flex items-center gap-2">
+            <input id="input-search" type="text" class="grow" placeholder="Search by keyword">
+        </label>
+    </div>
+
+
+    <div class="overflow-auto h-[400px]">
+        <table id="table-equipment" class="table table-pin-rows">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Condition</th>
+                    <th>IsActive</th>
+                    <th>CreateAt</th>
+                    <th>UpdateAt</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <script type="text/x-handlebars-template" id="table-equipment-template">
+                %#each equipments%
+                    <tr class="hover cursor-pointer">
+                        <th class="text-ellipsis hover:text-clip overflow-auto scrollbar-hidden max-w-[100px]">%this._id%</th>
+                        <td>%this.name%</td>
+                        <td>%this.description%</td>
+                        <td>%this.category.0.name%</td>
+                        <td>%this.department.0.name%</td>
+                        <td>%this.status%</td>
+                        <td>%this.condition%</td>
+                        <td class="%#if (eq this.isActive "true")%text-success%else%text-error%/if%">%this.isActive%</td>
+                        <td>%formatDate this.createdAt "dd/mm/yyyy" "yyyy-mm-dd"%</td>
+                        <td>%formatDate this.updatedAt "dd/mm/yyyy" "yyyy-mm-dd"%</td>
+                        <th>
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+
+                            <button class="btn btn-sm btn-error">
+                                <i class="fa-solid fa-bug"></i>
+                            </button>
+                        </th>
+                    </tr>
+                %/each%
+            </script>
+        </table>
+    </div>
+</div>
+
+
+<dialog id="modal_equipment_create" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg text-center font-bold mb-4">Add Equipment</h3>
+
+        <div class="flex gap-4 mb-4">
+            <label class="input input-sm input-bordered flex items-center gap-2 w-full">
+                <i class="fa-solid fa-envelope"></i>
+                <input id="input-equipment-name" type="text" placeholder="Equipment name" class="grow" />
+            </label>
+
+            <label class="input input-sm input-bordered flex items-center gap-2 w-full">
+                <i class="fa-solid fa-envelope"></i>
+                <input id="input-equipment-description" type="text" placeholder="Description" class="grow" />
+            </label>
+        </div>
+
+        <div class="flex gap-4 mb-4">
+            <select id="select-equipment-category" class="select select-sm select-bordered w-full max-w-xs"></select>
+            <script type="text/x-handlebars-template" id="select-equipment-category-template">
+                <option disabled selected>Category?</option>
+                {{#each equipmentCategories}}
+                <option value="{{this._id}}">{{this.name}}</option>
+                {{/each}}
+            </script>
+
+            <select id="select-equipment-department" class="select select-sm select-bordered w-full max-w-xs"></select>
+            <script type="text/x-handlebars-template" id="select-equipment-department-template">
+                 <option disabled selected>Department?</option>
+                <option>Han Solo</option>
+            </script>
+        </div>
+
+        <div class="flex gap-4 mb-4">
+            <select id="select-equipment-status" class="select select-sm select-bordered w-full max-w-xs">
+                <option disabled selected>Status?</option>
+                <option>Han Solo</option>
+                <option>ABC</option>
+            </select>
+
+            <select id="select-equipment-condition" class="select select-sm select-bordered w-full max-w-xs">
+                <option disabled selected>Condition?</option>
+                <option>Han Solo</option>
+                <option>ABC</option>
+            </select>
+        </div>
+
+        <div class="modal-action justify-center gap-4">
+            <form method="dialog">
+                <button class="btn btn-sm w-32">Close</button>
+            </form>
+
+            <button id="btn-equipment-create" class="btn btn-sm btn-primary w-32">Save</button>
+        </div>
+
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>

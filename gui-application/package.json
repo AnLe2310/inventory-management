@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "build:css": "tailwindcss -i ./src/client/public/css/tailwind.css -o ./src/client/public/css/index.css --watch > /dev/null 2>&1"
+    "build:css": "tailwindcss -i ./src/client/public/css/tailwind.css -o ./src/client/public/css/index.css --watch"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

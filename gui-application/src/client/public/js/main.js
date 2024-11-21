@@ -1,3 +1,5 @@
+const api = 'http://localhost:3000';
+
 $('#btn-tab-sign-in').click(function () {
     $('#tab-sign-in').removeClass('hidden');
     $('#tab-sign-up').addClass('hidden');
@@ -18,6 +20,7 @@ function checkLogin() {
     if (token) {
         $('#btn-login').hide();
         $('#btn-logout').show();
+        showEquipment();
     } else {
         $('#btn-login').show();
         $('#btn-logout').hide();
@@ -40,7 +43,7 @@ $('#btn-sign-in').click(function () {
 
     $.ajax({
         method: "POST",
-        url: "http://localhost:3000/auth/login",
+        url: `${api}/auth/login`,
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: "json",
@@ -52,7 +55,7 @@ $('#btn-sign-in').click(function () {
             checkLogin();
         },
         error: function (err) {
-            console.log(err)
+            console.log(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -74,7 +77,7 @@ $('#btn-sign-up').click(function () {
 
     $.ajax({
         method: "POST",
-        url: "http://localhost:3000/auth/register",
+        url: `${api}/auth/register`,
         data: JSON.stringify(data),
         contentType: "application/json",
         dataType: "json",
@@ -86,10 +89,37 @@ $('#btn-sign-up').click(function () {
             showToast('register successfully, please check your email to activate your account', 'success');
         },
         error: function (err) {
-            console.log(err)
+            console.log(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
 
 });
+
+function showEquipment(keyword) {
+    $.ajax({
+        method: "GET",
+        url: `${api}/equipment${keyword ? `?keyword=${encodeURIComponent(keyword)}` : ''}`,
+        dataType: "json",
+        contentType: "application/json",
+        headers: {
+            'Authorization': 'Bearer ' + Cookies.get('token')
+        },
+        success: function (res) {
+            const template = convertPlaceHbs($('#table-equipment-template').html());
+            const compiled = Handlebars.compile(template);
+            const html = compiled({ equipments: res.data });
+            $('#table-equipment tbody').html(html);
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+}
+
+$('#input-search').on('input', _.debounce(function () {
+    const keyword = $(this).val().trim();
+    showEquipment(keyword);
+}, 200));
 

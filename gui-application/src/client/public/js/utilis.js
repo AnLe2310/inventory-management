@@ -27,3 +27,54 @@ function closeToast(toastId) {
         setTimeout(() => { toast.remove(); }, 500);
     }
 }
+
+function convertPlaceHbs(template, options = { from: { start: "%", end: "%" }, to: { start: "{{", end: "}}" } }) {
+    try {
+        const { from, to } = options;
+        const startRegex = new RegExp(from.start.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&') + '([^]*?)' + from.end.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), 'g');
+        // Tìm các cặp mở và đóng trong template
+
+        return template.replace(startRegex, function (match, p1) {
+            // Thực hiện thay thế trong từng cặp
+            return to.start + p1.replace(new RegExp(to.start.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), 'g'), from.start)
+                .replace(new RegExp(to.end.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&'), 'g'), from.end) + to.end;
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function formatDate(dateStr, output = "dd/mm/yyyy", input = "yyyy-mm-dd") {
+    let day, month, year;
+
+    const datePart = dateStr.split("T")[0].split(" ")[0];
+
+    switch (input.split(" ")[0]) {
+        case "dd-mm-yyyy": [day, month, year] = datePart.split("-"); break;
+        case "mm-dd-yyyy": [month, day, year] = datePart.split("-"); break;
+        case "yyyy-mm-dd": [year, month, day] = datePart.split("-"); break;
+        case "yyyy-dd-mm": [year, day, month] = datePart.split("-"); break;
+        case "dd/mm/yyyy": [day, month, year] = datePart.split("/"); break;
+        case "mm/dd/yyyy": [month, day, year] = datePart.split("/"); break;
+        case "yyyy/mm/dd": [year, month, day] = datePart.split("/"); break;
+        case "yyyy/dd/mm": [year, day, month] = datePart.split("/"); break;
+        default: throw new Error("Định dạng đầu vào không được hỗ trợ");
+    }
+
+    const date = new Date(year, month - 1, day);
+    day = String(date.getDate()).padStart(2, "0");
+    month = String(date.getMonth() + 1).padStart(2, "0");
+    year = date.getFullYear();
+
+    return output
+        .replace("dd", day)
+        .replace("mm", month)
+        .replace("yyyy", year);
+}
+
+function eq(a, b) {
+    return a === b;
+}
+
+Handlebars.registerHelper("formatDate", formatDate);
+Handlebars.registerHelper('eq', eq);
