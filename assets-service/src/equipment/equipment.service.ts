@@ -58,7 +58,43 @@ export class EquipmentService {
     }
 
     getEquipmentById(id: any) {
-        return this.EquipmentModel.findById(id);
+        return this.EquipmentModel.aggregate([
+            {
+                $match: {
+                    $or: [{
+                        _id: new Types.ObjectId(id)
+                    }]
+                }
+            },
+            {
+                $lookup: {
+                    from: 'equipmentcategories',
+                    let: { categoryId: { $toObjectId: '$categoryId' } },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ['$_id', '$$categoryId'] } } },
+                        { $project: { _id: 1, name: 1, description: 1 } }
+                    ],
+                    as: 'category'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'departments',
+                    let: { departmentId: { $toObjectId: '$departmentId' } },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ['$_id', '$$departmentId'] } } },
+                        { $project: { _id: 1, name: 1, description: 1 } }
+                    ],
+                    as: 'department'
+                }
+            },
+            {
+                $project: {
+                    categoryId: 0,
+                    departmentId: 0,
+                }
+            }
+        ]);
     }
 
     createEquipment(equipment: any) {

@@ -3613,14 +3613,6 @@ details.collapse summary::-webkit-details-marker {
   z-index: 10;
 }
 
-.row-auto {
-  grid-row: auto;
-}
-
-.row-span-1 {
-  grid-row: span 1 / span 1;
-}
-
 .m-4 {
   margin: 1rem;
 }
@@ -3706,10 +3698,6 @@ details.collapse summary::-webkit-details-marker {
   height: 1.25rem;
 }
 
-.h-\[500px\] {
-  height: 500px;
-}
-
 .h-\[400px\] {
   height: 400px;
 }
@@ -3724,14 +3712,6 @@ details.collapse summary::-webkit-details-marker {
 
 .w-\[400px\] {
   width: 400px;
-}
-
-.w-56 {
-  width: 14rem;
-}
-
-.w-28 {
-  width: 7rem;
 }
 
 .w-full {
@@ -3906,10 +3886,6 @@ details.collapse summary::-webkit-details-marker {
   overflow: auto;
 }
 
-.overflow-visible {
-  overflow: visible;
-}
-
 .truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4020,11 +3996,6 @@ details.collapse summary::-webkit-details-marker {
   padding: 0.5rem;
 }
 
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
 .text-center {
   text-align: center;
 }
@@ -4033,13 +4004,13 @@ details.collapse summary::-webkit-details-marker {
   text-align: justify;
 }
 
-.text-xl {
-  font-size: 1.25rem;
+.text-lg {
+  font-size: 1.125rem;
   line-height: 1.75rem;
 }
 
-.text-lg {
-  font-size: 1.125rem;
+.text-xl {
+  font-size: 1.25rem;
   line-height: 1.75rem;
 }
 
@@ -4059,9 +4030,9 @@ details.collapse summary::-webkit-details-marker {
   text-transform: capitalize;
 }
 
-.text-white {
+.text-error {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  color: var(--fallback-er,oklch(var(--er)/var(--tw-text-opacity, 1)));
 }
 
 .text-success {
@@ -4069,9 +4040,9 @@ details.collapse summary::-webkit-details-marker {
   color: var(--fallback-su,oklch(var(--su)/var(--tw-text-opacity, 1)));
 }
 
-.text-error {
+.text-white {
   --tw-text-opacity: 1;
-  color: var(--fallback-er,oklch(var(--er)/var(--tw-text-opacity, 1)));
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
 .shadow {
@@ -4127,24 +4098,8 @@ details.collapse summary::-webkit-details-marker {
   /* Safari and Chrome */
 }
 
-.hover\:max-w-full:hover {
-  max-width: 100%;
-}
-
-.hover\:overflow-visible:hover {
-  overflow: visible;
-}
-
-.hover\:text-ellipsis:hover {
-  text-overflow: ellipsis;
-}
-
 .hover\:text-clip:hover {
   text-overflow: clip;
-}
-
-.hover\:whitespace-nowrap:hover {
-  white-space: nowrap;
 }
 
 @media (min-width: 768px) {

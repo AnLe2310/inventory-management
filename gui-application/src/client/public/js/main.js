@@ -135,6 +135,7 @@ function loadEquipmentCategory() {
             const compiled = Handlebars.compile(template);
             const html = compiled({ equipmentCategories: res.data });
             $('#select-equipment-category').html(html);
+            $('#select-equipment-category-update').html(html);
         },
         error: function (err) {
             console.log(err);
@@ -155,6 +156,7 @@ function loadDepartment() {
             const compiled = Handlebars.compile(template);
             const html = compiled({ departments: res.data });
             $('#select-department').html(html);
+            $('#select-department-update').html(html);
         },
         error: function (err) {
             console.log(err);
@@ -190,6 +192,59 @@ $('#btn-equipment-create').click(function () {
             $('#select-equipment-condition').val('');
             showToast('create equipment successfully', 'success');
             modal_equipment_create.close();
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+});
+
+function updateEquipment(id) {
+    $.ajax({
+        method: "GET",
+        url: `${api}/equipment/${id}`,
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        dataType: "json",
+        contentType: "application/json",
+        success: function (res) {
+            $('#input-equipment-id-update').val(res.data[0]._id);
+            $('#input-equipment-name-update').val(res.data[0].name);
+            $('#input-equipment-description-update').val(res.data[0].description);
+            $('#select-equipment-category-update').val(res.data[0].category[0]._id);
+            $('#select-department-update').val(res.data[0].department[0]._id);
+            $('#select-equipment-status-update').val(res.data[0].status);
+            $('#select-equipment-condition-update').val(res.data[0].condition);
+            modal_equipment_update.showModal();
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+}
+
+$('#btn-equipment-update').click(function () {
+    const data = {
+        id: $('#input-equipment-id-update').val().trim(),
+        name: $('#input-equipment-name-update').val().trim(),
+        description: $('#input-equipment-description-update').val().trim(),
+        categoryId: $('#select-equipment-category-update').val(),
+        departmentId: $('#select-department-update').val(),
+        status: $('#select-equipment-status-update').val(),
+        condition: $('#select-equipment-condition-update').val(),
+        isActive: true
+    };
+    
+    $.ajax({
+        method: "PATCH",
+        url: `${api}/equipment/update`,
+        data: JSON.stringify(data),
+        dataType: "json",
+        contentType: "application/json",
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        success: function (res) {
+            showToast("Update equipment successfully", 'success');
         },
         error: function (err) {
             console.log(err);

@@ -27,7 +27,7 @@ export class EquipmentController {
     @ApiCustomResponse({ model: EquipmentResponseDTO })
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Roles('Admin', 'Manager', 'Employee')
-    @Get('id')
+    @Get(':id')
     async getEquipmentById(@Param('id') id: string) {
         return this.assetsClient.send({ cmd: "assets_equipment_getById" }, { id });
     }
