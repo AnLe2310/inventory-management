@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Query } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Equipment } from './interfaces/equipment.interface';
 import { AsyncParser } from '@json2csv/node';
+import { flatten } from '@json2csv/transforms';
 
 @Injectable()
 export class EquipmentService {
@@ -63,7 +64,7 @@ export class EquipmentService {
             {
                 $match: {
                     $or: [{
-                        _id: new Types.ObjectId(id)
+                        _id: new Types.ObjectId(`${id}`)
                     }]
                 }
             },
@@ -111,9 +112,48 @@ export class EquipmentService {
     }
 
     async exportEquipment() {
-        const data = await this.EquipmentModel.find().lean();
+        const data = await this.EquipmentModel.aggregate([{
+            $project: {
+                __v: 0
+            }
+        }]);
+        
+        const specKeys = new Set();
+    
+        data.forEach(item => {
+            if (item.specifications && typeof item.specifications === 'object') {
+                Object.keys(item.specifications).forEach(key => {
+                    specKeys.add(key);
+                });
+            }
+        });
+    
+        const baseFields = [
+            { value: "_id", label: "Id" },
+            { value: "name", label: "Name" },
+            { value: "description", label: "Description" },
+            { value: "categoryId", label: "CategoryId" },
+            { value: "departmentId", label: "DepartmentId" },
+            { value: "status", label: "Status" },
+            { value: "condition", label: "Condition" },
+            { value: "isActive", label: "IsActive" },
+            { value: "createdAt", label: "CreatedAt" },
+            { value: "updatedAt", label: "UpdatedAt" },
+        ];
+    
+        const specFields = Array.from(specKeys).map(key => ({
+            value: `specifications.${key}`,
+            label: (key as string).charAt(0).toUpperCase() + (key as string).slice(1)
+        }));
+    
+        const opts = {
+            fields: [...baseFields, ...specFields]
+        };
 
-        const parser = new AsyncParser();
+        const parser = new AsyncParser({
+            fields: opts.fields,
+            transforms: [flatten({ objects: true })]
+        });
         const csv = await parser.parse(data).promise();
         return csv;
     }
