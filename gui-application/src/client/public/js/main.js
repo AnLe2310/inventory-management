@@ -157,6 +157,7 @@ function loadDepartment() {
             const html = compiled({ departments: res.data });
             $('#select-department').html(html);
             $('#select-department-update').html(html);
+            $('#equipment-report_departmentId').html(html);
         },
         error: function (err) {
             console.log(err);
@@ -235,7 +236,7 @@ $('#btn-equipment-update').click(function () {
         condition: $('#select-equipment-condition-update').val(),
         isActive: true
     };
-    
+
     $.ajax({
         method: "PATCH",
         url: `${api}/equipment/update`,
@@ -245,6 +246,45 @@ $('#btn-equipment-update').click(function () {
         headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
         success: function (res) {
             showToast("Update equipment successfully", 'success');
+        },
+        error: function (err) {
+            console.log(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+});
+
+function reportEquipment(id) {
+    $('#equipment-report_equipmentId').val(id);
+    modal_equipment_report.showModal();
+}
+
+$('#btn-equipment-report_create').click(function () {
+    const data = {
+        equipmentId: $('#equipment-report_equipmentId').val().trim(),
+        userId: $('#equipment-report_userId').val().trim() || '67355face20f610c21fb52f8',
+        departmentId: $('#equipment-report_departmentId').val(),
+        title: $('#equipment-report_title').val().trim(),
+        description: $('#equipment-report_description').val(),
+        status: 'Pending',
+        isActive: true
+    };
+
+    $.ajax({
+        method: "POST",
+        url: `${api}/equipment-report/create`,
+        data: JSON.stringify(data),
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        dataType: 'json',
+        contentType: "application/json",
+        success: function (res) {
+            console.log(res);
+            showToast("Create Report successfully", 'success');
+            $('#equipment-report_equipmentId').val('');
+            $('#equipment-report_userId').val('');
+            $('#equipment-report_title').val('');
+            $('#equipment-report_description').val('');
+            modal_equipment_report.close();
         },
         error: function (err) {
             console.log(err);

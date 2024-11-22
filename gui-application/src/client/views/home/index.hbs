@@ -46,7 +46,7 @@
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
 
-                            <button class="btn btn-sm btn-error">
+                            <button class="btn btn-sm btn-error" onclick="reportEquipment('%this._id%')">
                                 <i class="fa-solid fa-bug"></i>
                             </button>
                         </th>
@@ -132,18 +132,17 @@
 
         <div class="flex gap-4 mb-4">
             <label class="input input-sm input-bordered flex items-center gap-2 w-full">
-                <i class="fa-solid fa-envelope"></i>
                 <input id="input-equipment-name-update" type="text" placeholder="Equipment name" class="grow" />
             </label>
 
             <label class="input input-sm input-bordered flex items-center gap-2 w-full">
-                <i class="fa-solid fa-envelope"></i>
                 <input id="input-equipment-description-update" type="text" placeholder="Description" class="grow" />
             </label>
         </div>
 
         <div class="flex gap-4 mb-4">
-            <select id="select-equipment-category-update" class="select select-sm select-bordered w-full max-w-xs"></select>
+            <select id="select-equipment-category-update"
+                class="select select-sm select-bordered w-full max-w-xs"></select>
 
             <select id="select-department-update" class="select select-sm select-bordered w-full max-w-xs"></select>
         </div>
@@ -171,6 +170,53 @@
             </form>
 
             <button id="btn-equipment-update" class="btn btn-sm btn-primary w-32">Save</button>
+        </div>
+
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+
+<dialog id="modal_equipment_report" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg text-center font-bold mb-4">Report Equipment</h3>
+
+        <div class="flex gap-4 mb-4">
+            <label class="input input-sm input-bordered flex items-center gap-2 w-full">
+                <i class="fa-solid fa-envelope"></i>
+                <input id="equipment-report_equipmentId" disabled type="text" placeholder="Equipment Id" class="grow" />
+            </label>
+
+            <label class="input input-sm input-bordered flex items-center gap-2 w-full">
+                <i class="fa-solid fa-envelope"></i>
+                <input id="equipment-report_userId" disabled type="text" placeholder="User Id" class="grow"
+                    value="67355face20f610c21fb52f8" />
+            </label>
+        </div>
+
+        <div class="flex gap-4 mb-4">
+            <label class="input input-sm input-bordered flex items-center gap-2 mb-4 w-full">
+                <i class="fa-solid fa-envelope"></i>
+                <input id="equipment-report_title" type="text" placeholder="Title" class="grow" />
+            </label>
+
+            <select id="equipment-report_departmentId"
+                class="select select-sm select-bordered w-full max-w-xs"></select>
+        </div>
+
+        <div class="mb-4">
+            <textarea id="equipment-report_description" class="textarea textarea-bordered w-full"
+                placeholder="Description"></textarea>
+        </div>
+
+        <div class="modal-action justify-center gap-4">
+            <form method="dialog">
+                <button class="btn btn-sm w-32">Close</button>
+            </form>
+
+            <button id="btn-equipment-report_create" class="btn btn-sm btn-primary w-32">Save</button>
         </div>
 
     </div>
