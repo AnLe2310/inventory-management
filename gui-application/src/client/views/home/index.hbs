@@ -1,11 +1,11 @@
 <div class="container mx-auto md:p-6 lg:p-8 xl:p-10 bg-base-100 mt-10 rounded-btn">
     <div class="mb-4 flex justify-between">
-        <button class="btn btn-sm btn-primary" onclick="modal_equipment_create.showModal()">
+        <button class="btn btn-sm btn-primary w-40" onclick="modal_equipment_create.showModal()">
             <i class="fa-solid fa-plus"></i> Add Equipment
         </button>
 
         <label class="input input-sm input-bordered flex items-center gap-2">
-            <input id="input-search" type="text" class="grow" placeholder="Search by keyword">
+            <input id="input-search" type="text" class="grow w-40" placeholder="Search by keyword">
         </label>
     </div>
 
@@ -54,6 +54,10 @@
                 %/each%
             </script>
         </table>
+    </div>
+
+    <div class="flex gap-4 mt-4">
+        <button id="btn-equipment-export" class="btn btn-sm btn-primary w-40">Export CSV</button>
     </div>
 </div>
 
@@ -197,7 +201,7 @@
         </div>
 
         <div class="flex gap-4 mb-4">
-            <label class="input input-sm input-bordered flex items-center gap-2 mb-4 w-full">
+            <label class="input input-sm input-bordered flex items-center gap-2w-full">
                 <i class="fa-solid fa-envelope"></i>
                 <input id="equipment-report_title" type="text" placeholder="Title" class="grow" />
             </label>

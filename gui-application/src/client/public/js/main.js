@@ -55,7 +55,7 @@ $('#btn-sign-in').click(function () {
             checkLogin();
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -89,7 +89,7 @@ $('#btn-sign-up').click(function () {
             showToast('register successfully, please check your email to activate your account', 'success');
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -112,7 +112,7 @@ function showEquipment(keyword) {
             $('#table-equipment tbody').html(html);
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -138,7 +138,7 @@ function loadEquipmentCategory() {
             $('#select-equipment-category-update').html(html);
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -160,7 +160,7 @@ function loadDepartment() {
             $('#equipment-report_departmentId').html(html);
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -195,7 +195,7 @@ $('#btn-equipment-create').click(function () {
             modal_equipment_create.close();
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -219,7 +219,7 @@ function updateEquipment(id) {
             modal_equipment_update.showModal();
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -248,7 +248,7 @@ $('#btn-equipment-update').click(function () {
             showToast("Update equipment successfully", 'success');
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });
@@ -278,7 +278,6 @@ $('#btn-equipment-report_create').click(function () {
         dataType: 'json',
         contentType: "application/json",
         success: function (res) {
-            console.log(res);
             showToast("Create Report successfully", 'success');
             $('#equipment-report_equipmentId').val('');
             $('#equipment-report_userId').val('');
@@ -287,7 +286,33 @@ $('#btn-equipment-report_create').click(function () {
             modal_equipment_report.close();
         },
         error: function (err) {
-            console.log(err);
+            console.error(err);
+            showToast(err.responseJSON.message, 'error');
+        }
+    });
+});
+
+
+$('#btn-equipment-export').click(function () {
+    $.ajax({
+        method: "GET",
+        url: `${api}/equipment/export`,
+        headers: { 'Authorization': 'Bearer ' + Cookies.get('token') },
+        success: function (res) {
+            console.log(res);
+
+            const blob = new Blob([res.data], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Equipment.csv';
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+        },
+        error: function (err) {
+            console.error(err);
             showToast(err.responseJSON.message, 'error');
         }
     });

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Equipment } from './interfaces/equipment.interface';
+import { AsyncParser } from '@json2csv/node';
 
 @Injectable()
 export class EquipmentService {
@@ -107,5 +108,13 @@ export class EquipmentService {
 
     deleteEquipment(id: any) {
         return this.EquipmentModel.findByIdAndDelete(id);
+    }
+
+    async exportEquipment() {
+        const data = await this.EquipmentModel.find().lean();
+
+        const parser = new AsyncParser();
+        const csv = await parser.parse(data).promise();
+        return csv;
     }
 }

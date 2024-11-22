@@ -14,6 +14,13 @@ import { EquipmentResponseDTO } from './dto/equipmentResponse.dto';
 export class EquipmentController {
     constructor(@Inject('ASSETS_SERVICE') private readonly assetsClient: ClientProxy,) { }
 
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('Admin', 'Manager', 'Employee')
+    @Get('export')
+    async exportEquipment() {
+        return this.assetsClient.send({ cmd: "assets_equipment_export" }, {});
+    }
+
     @ApiQuery({ name: 'keyword', required: false })
     @ApiCustomResponse({ model: EquipmentResponseDTO, isArray: true })
     @UseGuards(JwtAuthGuard, RolesGuard)

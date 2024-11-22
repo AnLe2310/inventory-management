@@ -10,7 +10,7 @@ export class EquipmentController {
 
     @MessagePattern({ cmd: "assets_equipment_getAll" })
     @Get()
-    async getEquipment(payload: {keyword: string}) {
+    async getEquipment(payload: { keyword: string; }) {
         return await this.EquipmentService.getEquipment(payload.keyword);
     }
 
@@ -36,5 +36,11 @@ export class EquipmentController {
     @Delete()
     async deleteEquipment(payload: { id: any; }) {
         return await this.EquipmentService.deleteEquipment(payload.id);
+    }
+
+    @MessagePattern({ cmd: "assets_equipment_export" })
+    @Get()
+    async exportEquipment() {
+        return await this.EquipmentService.exportEquipment();
     }
 }
